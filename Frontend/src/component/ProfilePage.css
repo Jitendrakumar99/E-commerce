@@ -1,0 +1,24 @@
+input{
+	border: 0.5px solid gray;
+	width:200px;
+	height: 40px;
+	padding: 3px;
+}
+input:focus,
+input:active {
+    outline: none;
+	border:0.5px solid blue;
+}
+.radioinputmain
+{
+	width: 200px;
+}
+.radioinput
+{
+	width: 15px;
+	height: 15px;
+}
+.Address
+{
+	width: 100%;
+}

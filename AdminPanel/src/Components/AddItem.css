@@ -1,0 +1,30 @@
+.lettercard{
+	width: fit-content;
+	height: fit-content;
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 5px gray;
+	background-color: rgb(255, 255, 255);
+	
+}
+.ml-5{
+	margin-left: 10px;
+	flex-wrap: wrap;
+	display: flex;
+	gap: 10px;
+}
+.Preview
+{
+	width: 150px;
+	height: 150px;
+	padding: 2px;
+	border: 1px solid gray;
+}
+.fileInput{
+	width: 100px;
+	height: 100px;
+}
+.Previewimage{
+	width: 100%;
+	height: 100%;
+}

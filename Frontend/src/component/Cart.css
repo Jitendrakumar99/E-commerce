@@ -1,0 +1,19 @@
+.Cartlist1
+{
+	width: 100%;
+	
+	gap: 10px;
+	flex-wrap: wrap;
+	position: relative;
+	display: flex;
+}
+.total
+{
+	cursor: pointer;
+
+}
+.total:hover
+{
+	background-color:gray;
+}
+/* .card  */

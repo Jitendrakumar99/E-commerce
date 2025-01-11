@@ -1,0 +1,6 @@
+{
+	"mos.port": "",
+	"files.exclude": {
+		"**/.git": false
+	}
+}

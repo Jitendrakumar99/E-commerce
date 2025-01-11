@@ -1,0 +1,101 @@
+
+*
+{
+	margin: 0px;
+	padding: 0px;
+}
+.slickmain {
+	width: 100%;  /* Full viewport width */
+	height: 60vh !important; 
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .slickcard {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 60vh !important; 
+	position: relative !important;
+  
+  }
+  
+  .slickcard img {
+	width: 100%;
+	height: 200%;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: top;
+	aspect-ratio: 16/10 !important;
+  
+  }
+  @media screen and (max-width:768px) {
+	.slickcard
+	{
+    height: 40vh !important;
+	}
+	.slickmain
+	{
+	  height: 40vh !important;
+	}
+	.slickcard img {
+		width: 150% !important;
+	}
+	
+  }
+  @media screen and (max-width:450px) {
+	.slickcard
+	{
+  height: 30vh !important;
+	}
+	.slickmain
+	{
+	  height: 30vh !important;
+	}
+	.slickcard img {
+		width: 200% !important;
+		background-position: center !important;
+	}
+	
+  }
+  /* Customize dots */
+  .slick-dots {
+	bottom: 20px;
+  }
+  
+  .slick-dots li button:before {
+	color: white;
+	font-size: 12px;
+  }
+  
+  .slick-dots li.slick-active button:before {
+	color: red; /* Active dot color */
+  }
+  
+  /* Customize arrow buttons */
+  button .slick-arrow
+  {
+	height: 500px;
+	width: 50px;
+  }
+  
+   .slick-next {
+	right: 50px;
+	color: red;
+	/* font-size: 50px; */
+  }
+  .slick-prev {
+	left: 50px;
+	color: red;
+	z-index: 5;
+  }
+  
+  .slick-prev:hover, .slick-next:hover {
+	color: red;
+  }
