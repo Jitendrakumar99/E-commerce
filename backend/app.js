@@ -35,7 +35,7 @@ app.get('/',function(req,res)
   
 })
 
-mongoose.connect('mongodb+srv://jitendrasharma6839:asqxV5qUgm4xqwPu@cluster0.kqbc3.mongodb.net/DataBase')
+mongoose.connect('')
 .then(res=>
 {
   console.log('mongoose connect');
@@ -48,7 +48,7 @@ mongoose.connect('mongodb+srv://jitendrasharma6839:asqxV5qUgm4xqwPu@cluster0.kqb
 })
 
 // require("dotenv").config();
-const stripe = require("stripe")('sk_test_51QZaZSDXUaiBwbhKhGxPdqR33FQfZclDaY9BoaJ3m9S15x1kmGdigNpYfO4p3bsEP6ZHro3J5Vq6TPJrXAZhmIE000n4XSBRgL');
+const stripe = require("stripe")('');
 app.post("/getcheckoutdata", async (req, res) => {
   const { products } = req.body;
  console.log(products);
