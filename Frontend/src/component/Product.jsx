@@ -13,26 +13,41 @@ import { AppContext } from "../context/Context";
 
 function Product() {
   // const [id, setid] = useState(0);
-  const {product,setUrl,cartItems,lod,setfilter,pricerange,rating,fetchdata,search,setSearch,disPer,clone,setrating,DiscountP}=useContext(AppContext)
- 
+  const {product,setUrl,cartItems,lod,setfilter,pricerange,rating,fetchdata,disPer,clone,setrating,DiscountP}=useContext(AppContext);
+  console.log(product);
+  
+  const [search,setSearch]=useState("");
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
   const [isOpen5, setIsOpen5] = useState(false);
-
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const setprice = (s) => {
     setfilter(s);
   };
  
 
   const Search = (e) => {
-    const newSearch = e.target.value.toLowerCase();
-    setSearch(newSearch);
-    if (search) {
-      fetchdata(`/search?q=${search}`);
+    const query = e.target.value.toLowerCase();
+    
+    console.log(query);
+    
+    setSearch(query);
+    if (query.trim() === "") {
+      setFilteredProducts([]);
     } else {
-      fetchdata("");
+      const filtered = product.filter((data) =>
+        data.title.toLowerCase().includes(query) ||
+      data.description.toLowerCase().includes(query) ||
+      data.category.toLowerCase().includes(query) ||
+      data.brand.toLowerCase().includes(query) ||
+      data.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+      data.reviews.some((review) =>
+      review.comment.toLowerCase().includes(query)
+      )
+      );
+      setFilteredProducts(filtered);
     }
   };
 
@@ -170,12 +185,10 @@ function Product() {
         </div>
         {lod&&<Loader/>}
         <div className="productlist">
-          {product && product.map((item) => (
-            // console.log(item),
-            <Card item={item} key={cartItems} />
-          ))}
-             
-        </div>
+        {filteredProducts.length > 0
+          ? filteredProducts.map((item) => (<Card item={item} key={item._id} />))
+          : product&&product.map((item) => <Card item={item} key={item._id} />)}
+      </div>
         
         {clone == 0  && <Popup />}
 

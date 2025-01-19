@@ -19,7 +19,8 @@ const {
   loginUser,
   getcartdata,
   updataCartdata,
-  getWishListdata
+  getWishListdata,
+  removeWishList
 } = require('../Controller/userController');
 
 
@@ -29,7 +30,7 @@ Route.post('/login', loginUser);
 Route.get('/user/profile', authenticate, getUserById);
 Route.put('/:id', updateUser);
 Route.delete('/:id', deleteUser);
-Route.post('/add-address', addAddress);
+Route.post('/add-address', authenticate,addAddress);
 Route.post('/add-payment-method', addPaymentMethod);
 Route.post('/add-to-cart',authenticate, addToCart);
 Route.post('/removeFromCart',authenticate, removeFromCart);
@@ -37,6 +38,7 @@ Route.get('/getcartdata',authenticate, getcartdata);
 Route.get('/getWishListdata',authenticate, getWishListdata);
 Route.post('/updataCartdata', updataCartdata);
 Route.post('/add-to-wishlist',authenticate, addToWishlist);
+Route.post('/remove-form-wishlist',authenticate, removeWishList);
 
 
 module.exports=Route;

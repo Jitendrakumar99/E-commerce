@@ -6,26 +6,27 @@ import Loader from "../component/Loader";
 
 export const AppContext=createContext({
   addToCart: () => {},
-  // addToWishList: () => {},
+  addToWishList: () => {},
+  removeFromWishList: () => {},
   removeFromCart: () => {},
+  loginhandler:()=>{},
+  add_address:()=>{},
 });
 
 export default function AppContextProvider({children}) {
 	const [counter ,setcounter]=useState(10);
    
-    
   const [Url,setUrl]=useState();
   const [data,setData]=useState(null);
   const [lod,setloader]=useState(true)
   const [Filter,setfilter]=useState(null);
   const [clone,setClone]=useState(null)
-  const [search,setSearch]=useState("");
   const [getrating,setrating]=useState(null);
   const [count ,setCount]=useState(5);
   const [countwish,setwishlist]=useState(0);
   const [dis,disPer]=useState(0);
   const [cartItems, setCartItems] = useState([]);
-  const [cartIds, setCartIds] = useState([]);
+  const [UserData, setUserData] = useState([]);
   const [TotalPrice,setTotalPrice]=useState(0)
   const [TotalDisPrice,setTotalDisPrice]=useState(0)
   const [Quantity,setQuantity]=useState(1);
@@ -36,7 +37,7 @@ export default function AppContextProvider({children}) {
  // let api=`https://dummyjson.com/products${Url}`
  // const response = await fetch(api);
  // const data =await response.json();
- async function fetchdata(Url = "") {
+ async function fetchdata() {
   try {
     const response = await axios.get('http://localhost:9000/getProduct');
     console.log(response);
@@ -50,6 +51,8 @@ export default function AppContextProvider({children}) {
   useEffect(() => {
     fetchdata();
   }, []); 
+  console.log(data);
+  
 
 
 
@@ -209,38 +212,62 @@ useEffect(() => {
   setTotalDisPrice(totaldisprice);
   } 
 }, [cartItems]);
+ 
 
-useEffect(() => {
-  axios.get("http://localhost:9000/get_cart_data")
-  .then(res=>{
-    // console.log(res.data[0]);
-    const data1=res.data[0].Product_id
-    console.log(data1);
-    setitemid(data1);
-    console.log(itemid);
+const Loginhandler=async(loginData)=>{
+  axios
+  .post("http://localhost:9000/login", loginData)
+  .then((res) => {
+    console.log(res);
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("isLoggedIn", "true");
     
   })
-  .catch(err=>{
-    console.log(err);
-  })
-  
+  .catch((err) => {
+    console.log("error");
+  });
+}
+const render=localStorage.getItem('isLoggedIn');
+if(render){
+useEffect(() => {
 }, [])
-
-useEffect(() => {
-  if(data&&itemid.length>0)
+}
+const AddToWishList=async(id,token)=>{
+  axios
+  .post(
+    "http://localhost:9000/add-to-wishlist",
+    { productId:id },
     {
-      console.log(data);
-       const temp=[...data];
-       const itemidNumbers = itemid.map(id => parseInt(id, 10));
-       const newitem=temp.filter(val=>itemidNumbers.includes(val.id));
-       setCartItems(newitem)
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-    console.log(itemid);
-    
-    
-}, [itemid,data]); 
-
-
+  )
+  .then((res) => {
+    console.log("Response:", res);
+  })
+  .catch((err) => {
+    console.log("Error:", err);
+  });
+}
+const RemoveFromWishList=async(id,token)=>{
+  axios
+  .post(
+    "http://localhost:9000/remove-form-wishlist",
+    { wishlistId:id },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  .then((res) => {
+    console.log("Response:", res);
+  })
+  .catch((err) => {
+    console.log("Error:", err);
+  });
+}
 const RemoveFromCart=async(data,token)=>{
   axios
   .post("http://localhost:9000/removeFromCart", data, {
@@ -295,8 +322,8 @@ const RemoveFromCart=async(data,token)=>{
       });
       
       if (response.status === 200) {
-        console.log('User Data:', response.data.Cart); 
-        setCartIds(response.data.Cart)
+        console.log('User Data:', response.data); 
+        setUserData(response.data)
         return response.data;
       }
     } catch (error) {
@@ -309,7 +336,26 @@ const RemoveFromCart=async(data,token)=>{
     fetchWishListdata();
   }, [])
 
-  
+  const Add_address=async(addressdata,token)=>{
+      axios.post('http://localhost:9000/add-address',
+        {
+          addressdata
+        },
+        {
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }
+      )
+      .then((res)=>{
+        console.log(res); 
+      })
+      .catch((err)=>{
+        console.log(err);
+        
+      })
+  }
+
   const fetchcartdata=async()=>{
     try{
      const token=localStorage.getItem('token');
@@ -355,12 +401,15 @@ const RemoveFromCart=async(data,token)=>{
 
 let product=clone||data;  
 const value={
-        counter,setcounter,countwish,WishlistItem,setwishlist,product,setUrl,lod,setfilter,pricerange,rating,fetchdata,search,setSearch,disPer,clone,setrating,DiscountP,
+        counter,setcounter,countwish,setwishlist,product,UserData,setUrl,lod,setfilter,pricerange,rating,fetchdata,disPer,clone,setrating,DiscountP,
 		cartItems, setCartItems,TotalPrice,setTotalPrice,TotalDisPrice,setTotalDisPrice,Quantity,setQuantity,productinfo,setProductinfo,WishlistItem,setwishlistItem,
     showuser,setshowuser,
     addToCart: AddToCart,
-    // addToWishList:AddToWishList,
-    removeFromCart:RemoveFromCart
+    addToWishList:AddToWishList,
+    removeFromCart:RemoveFromCart,
+    loginhandler:Loginhandler,
+    removeFromWishList:RemoveFromWishList,
+    add_address:Add_address
     }
 //  key={data} setUrl={setUrl} lod={lod} setfilter={setfilter} pricerange={pricerange} rating={rating} fetchdata={fetchdata} search={search} setSearch={setSearch} disPer={disPer} clone={clone} setrating={setrating} DiscountP={DiscountP}
     return <AppContext.Provider value={value}>

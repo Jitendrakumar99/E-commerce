@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import { AppContext } from '../context/Context'
 import { FaArrowDown } from "react-icons/fa6";
 import { FaPercent } from "react-icons/fa";
@@ -8,7 +8,9 @@ import '../component/Card.css'
 import "./Product.css";
 import Lottie  from 'lottie-react';
 function Wishlist() {
-const {WishlistItem,setwishlistItem,setwishlist,countwish}=useContext(AppContext);
+const {WishlistItem,setwishlistItem,setwishlist,countwish,removeFromWishList}=useContext(AppContext);
+// console.log("wish",WishlistItem);
+
 function price(v) {
 	const pr = v.toFixed(0);
 	return pr;
@@ -16,12 +18,16 @@ function price(v) {
   function dis(v, v1) {
 	return (v1 - (v1 * v) / 100).toFixed(1);
   }
+
 const removeitemHandler=(id)=>
 {
-   const newset=WishlistItem.filter((item)=>item.id!==id);
-   setwishlistItem(newset);
-   setwishlist(countwish-1);
+   const token=localStorage.getItem('token');
+   removeFromWishList(id,token);
 }
+useEffect(() => {
+}, [WishlistItem])
+
+
 if(WishlistItem.length===0)
 {
   return(
@@ -41,13 +47,14 @@ if(WishlistItem.length===0)
     </div>
 	</>
   )
+
 }
 
 
   return (
 	<>
   <div className="w-[100%] h-[70px]  "> 
-	<div className="m-5 h-[60px] border text-2xl pl-2 items-center  flex">My Wishlist ({countwish})</div>
+	<div className="m-5 h-[60px] border text-2xl pl-2 items-center  flex">My Wishlist ({WishlistItem.length})</div>
 	 </div>
 	<div className="w-full h-full flex justify-start items-center  flex-wrap gap-5 pl-5 p-auto">
     
@@ -82,7 +89,7 @@ if(WishlistItem.length===0)
 	  </div>
 	  <div className="ship">{item.shippingInformation}</div>
 	  <div className="delivery">{item.returnPolicy}</div>
-	 <button onClick={()=>removeitemHandler(item.id)}  className="button bg-red-400 hover:bg-red-500">
+	 <button onClick={()=>removeitemHandler(item.wishlistId)}  className="button bg-red-400 hover:bg-red-500">
 	  Remove form WishList
 	  </button>
 	</div>

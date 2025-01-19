@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoMdLocate } from "react-icons/io";
+import { AppContext } from "../context/Context";
+import axios from "axios";
 import "./ProfilePage.css";
 function ProfilePage() {
   const [activeSection, setActiveSection] = useState("profile");
   const [Showedit, setShowedit] = useState(false);
-  const [addressdata,setAddressdata] =useState({
-    name:"",
-    phone:"",
-    pincode:"",
-    locality:"",
-    address:"",
-    city:"",
-    state:"",
-    adtype:""
+  const { add_address, UserData } = useContext(AppContext);
+  const [OpenFrom,setOpenFrom]=useState(false);
+  // console.log(UserData.Address[0]);
+
+  const [addressdata, setAddressdata] = useState({
+    name: "",
+    phone: "",
+    pincode: "",
+    locality: "",
+    address: "",
+    city: "",
+    state: "",
+    adtype: "",
   });
   const navigate = useNavigate();
   const handleSectionChange = (section) => {
@@ -29,21 +35,20 @@ function ProfilePage() {
   const Show_edit = () => {
     setShowedit(false);
   };
-  const getdata=(Event)=>
-  {
-    const {name,value}=Event.target;
-    setAddressdata((prev)=>({...prev,[name] : value}))     
-  }
+  const getdata = (Event) => {
+    const { name, value } = Event.target;
+    setAddressdata((prev) => ({ ...prev, [name]: value }));
+  };
   const fetchLocation = async () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.");
       return;
     }
-  
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-  
+
         try {
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyD1DWK-UIhFPH8yLOiLFgRPEqaGQDCQANE`
@@ -51,8 +56,8 @@ function ProfilePage() {
           const data = await response.json();
           console.log(data);
           // api_key : 882d7975a95d4d6d96760a80afbdfee1
-  console.log(data);
-  
+          console.log(data);
+
           if (data.results && data.results.length > 0) {
             const details = data.results[0].components;
             setAddressdata((prev) => ({
@@ -87,10 +92,10 @@ function ProfilePage() {
       }
     );
   };
-  
-  const SubmitHandler=()=>
-  {
-    console.log(addressdata);
+
+  const SubmitHandler = () => {
+    const token = localStorage.getItem("token");
+    add_address(addressdata, token);
     setAddressdata({
       name: "",
       phone: "",
@@ -101,7 +106,7 @@ function ProfilePage() {
       state: "",
       adtype: "",
     });
-  }
+  };
   const name = localStorage.getItem("username");
   return (
     <div className="flex">
@@ -212,26 +217,56 @@ function ProfilePage() {
               Manage Addresses
             </h2>
             <div className="Addaddress border-gray-300 border-2 h-16 p-1 tracking-widest flex letter items-center mb-5 ">
-              <div className="Add text-blue-800">
-                {" "}
-                <span className="text-3xl text-center">+</span> ADD NEW ADDRESS
+              <div onClick={()=>setOpenFrom(!OpenFrom)} className="Add text-blue-800 cursor-pointer">
+                <span  className="text-3xl text-center">+</span> ADD NEW ADDRESS
               </div>
             </div>
-            <div className="bg-[#F5FAFF] p-5 flex flex-col gap-5 border mb-8">
+            {OpenFrom&&<div className="bg-[#F5FAFF] p-5 flex flex-col gap-5 border mb-8">
               <div className="text-blue-800 ">ADD A NEW ADDRESS</div>
-              <div onClick={fetchLocation} className="bg-[#2874F0] w-[200px] p-2 flex flex-row items-center text-white">
+              <div
+                onClick={fetchLocation}
+                className="bg-[#2874F0] w-[200px] p-2 flex flex-row items-center text-white"
+              >
                 <IoMdLocate />
                 Use My current location
               </div>
-              <div className="gap-5 flex"> 
-                <input className="pl-2" onChange={(event)=>getdata(event)} type="text" name="name" value={addressdata.name} placeholder="Name" />
-                <input className="pl-2" onChange={(event)=>getdata(event)} type="number" name="phone" value={addressdata.phone} placeholder="Phone" />
+              <div className="gap-5 flex">
+                <input
+                  className="pl-2"
+                  onChange={(event) => getdata(event)}
+                  type="text"
+                  name="name"
+                  value={addressdata.name}
+                  placeholder="Name"
+                />
+                <input
+                  className="pl-2"
+                  onChange={(event) => getdata(event)}
+                  type="number"
+                  name="phone"
+                  value={addressdata.phone}
+                  placeholder="Phone"
+                />
               </div>
-              <div  className="gap-5 flex">
-                <input className="pl-2" onChange={(event)=>getdata(event)} type="number" name="pincode" value={addressdata.pincode} placeholder="Pincode" />
-                <input className="pl-2" onChange={(event)=>getdata(event)} type="text" name="locality" value={addressdata.locality} placeholder="Locality" />
+              <div className="gap-5 flex">
+                <input
+                  className="pl-2"
+                  onChange={(event) => getdata(event)}
+                  type="number"
+                  name="pincode"
+                  value={addressdata.pincode}
+                  placeholder="Pincode"
+                />
+                <input
+                  className="pl-2"
+                  onChange={(event) => getdata(event)}
+                  type="text"
+                  name="locality"
+                  value={addressdata.locality}
+                  placeholder="Locality"
+                />
               </div>
-              <div onChange={(event)=>getdata(event)} className=" h-20 flex">
+              <div onChange={(event) => getdata(event)} className=" h-20 flex">
                 <input
                   className="Address w-40 pl-2"
                   style={{ width: "200px" }}
@@ -242,8 +277,20 @@ function ProfilePage() {
                 />
               </div>
               <div className="gap-5 flex">
-                <input className="pl-2" onChange={(event)=>getdata(event)} type="text" name="city" value={addressdata.city} placeholder="City/town" />
-                <select name="state" value={addressdata.state} onChange={(event)=>getdata(event)}  className="w-[200px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 active:bg-gray-200">
+                <input
+                  className="pl-2"
+                  onChange={(event) => getdata(event)}
+                  type="text"
+                  name="city"
+                  value={addressdata.city}
+                  placeholder="City/town"
+                />
+                <select
+                  name="state"
+                  value={addressdata.state}
+                  onChange={(event) => getdata(event)}
+                  className="w-[200px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-gray-100 active:bg-gray-200"
+                >
                   <option value="">Select State</option>
                   <option value="andhra-pradesh">Andhra Pradesh</option>
                   <option value="arunachal-pradesh">Arunachal Pradesh</option>
@@ -297,7 +344,7 @@ function ProfilePage() {
                       type="radio"
                       name="adtype"
                       value={"Home"}
-                      onChange={(event)=>getdata(event)}
+                      onChange={(event) => getdata(event)}
                     />
                     <label htmlFor="home">Home</label>
                   </div>
@@ -308,45 +355,63 @@ function ProfilePage() {
                       id="work"
                       type="radio"
                       name="adtype"
-                      value={'work'}
-                      onChange={(event)=>getdata(event)}
+                      value={"work"}
+                      onChange={(event) => getdata(event)}
                     />
                     <label htmlFor="work">Work</label>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row gap-2">
-                <div onClick={()=>SubmitHandler()} className="w-40 bg-blue-500 h-10 text-center p-2 cursor-pointer">Save</div>
-                <div className="w-40 text-blue-500 h-10 text-center p-2 cursor-pointer">cancel</div>
-              </div>
-            </div>
 
-            <div className="Addaddress border-gray-300 border-2  tracking-widest flex flex-col gap-2 p-2">
-              <div className="WorkPlace flex flex-row justify-between w-full items-center">
-                <div className="d">Home</div>
+
+
+              <div className="flex flex-row gap-2">
                 <div
-                  className="hamburger relative"
-                  onMouseEnter={() => Show_edit_delete()}
-                  onMouseLeave={() => Show_edit()}
+                  onClick={() => SubmitHandler()}
+                  className="w-40 bg-blue-500 h-10 text-center p-2 cursor-pointer"
                 >
-                  <HiDotsVertical className="relative" />
-                  {Showedit && (
-                    <div className=" absolute w-20 h-20 bg-white border-2 ml-[-68px] top-[-7px] flex items-center flex-col justify-evenly">
-                      <div className="edit hover:text-blue-500 cursor-pointer">
-                        Edit
-                      </div>
-                      <div className="delete hover:text-blue-500 cursor-pointer">
-                        Delete
-                      </div>
-                    </div>
-                  )}
+                  Save
+                </div>
+                <div className="w-40 text-blue-500 h-10 text-center p-2 cursor-pointer">
+                  cancel
                 </div>
               </div>
-              <div className="NamePhone flex flex-row gap-10">
-                <div className="">Jitendra kumar</div>
-                <div className="">6299607595</div>
-              </div>
-              <div className="alladdress">sdmlskmdlkmdlkmd sld l</div>
+            </div>}
+
+            <div className="flex flex-col gap-5">
+              {UserData &&
+                UserData.Address.map((data, index) => (
+                  <div
+                    key={index} 
+                    className="Addaddress border-gray-300 border-2  tracking-widest flex flex-col gap-2 p-2"
+                  >
+                    <div className="WorkPlace flex flex-row justify-between w-full items-center">
+                      <div className="d">{data.adtype}</div>
+                      <div
+                        className="hamburger relative"
+                        onMouseEnter={() => Show_edit_delete()}
+                        onMouseLeave={() => Show_edit()}
+                      >
+                        <HiDotsVertical className="relative" />
+                        {Showedit && (
+                          <div className="absolute w-20 h-20 bg-white border-2 ml-[-68px] top-[-7px] flex items-center flex-col justify-evenly">
+                            <div className="edit hover:text-blue-500 cursor-pointer">
+                              Edit
+                            </div>
+                            <div className="delete hover:text-blue-500 cursor-pointer">
+                              Delete
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="NamePhone flex flex-row gap-10">
+                      <div>{data.name}</div>
+                      <div>{data.phone}</div>
+                    </div>
+                    <div className="alladdress">{`${data.address},${data.city},${data.locality},${data.state},${data.pincode}`}</div>
+                  </div>
+                ))}
             </div>
           </div>
         )}

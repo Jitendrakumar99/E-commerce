@@ -1,10 +1,11 @@
 const User = require("../models/User/MainUserSchema");
 const bcrypt = require("bcrypt");
-const Cart = require("../models/User/cartSchema ");
+const Cart = require("../models/User/cartSchema ");4
 const WishList=require('../models/User/wishlistSchema ')
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Product = require("../models/Product/ProductData");
+const Address=require('../models/User/Address')
 const { userInfo } = require("os");
 require("dotenv").config();
 const JWT_SECRET =
@@ -96,7 +97,7 @@ const getUserById = async (req, res) => {
     const userId = req.user.userId;
     console.log(req.user);
     const user = await User.findById(userId)
-      // .populate({path:'Address'})
+      .populate({path:'Address'})
       // .populate({path:'PaymentMethod'})
       // .populate({path:'Order'})
       .populate({ path: "Cart" });
@@ -146,15 +147,28 @@ const deleteUser = async (req, res) => {
   }
 };
 const addAddress = async (req, res) => {
-  const { userId, addressId } = req.body;
+  const { name, phone, pincode, locality, address, city, state, adtype } = req.body.addressdata;
+  const userId=req.user.userId;
 
+  
   try {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    user.Address.push(addressId);
+    const newaddress=new Address({
+      name,
+      phone,
+      pincode,
+      locality,
+      address,
+      city,
+      state,
+      adtype,
+      userId:user._id
+    })
+    newaddress.save();
+    user.Address.push(newaddress._id);
     await user.save();
     res.status(200).json({ message: "Address added to user", user });
   } catch (error) {
@@ -207,26 +221,19 @@ const addToCart = async (req, res) => {
 };
 const removeFromCart = async (req, res) => {
   try {
-    const { productId } = req.body; // Get the productId from the request body
-    const { userId } = req.user; // Extract userId from the authenticated user
-
-    // Step 1: Find the cart item by productId and userId, and delete it from Cart collection
+    const { productId } = req.body; 
+    const { userId } = req.user; 
     const cartItem = await Cart.findOneAndDelete({ productId, userId });
     if (!cartItem) {
       return res.status(404).json({ message: "Item not found in cart" });
     }
-
-    // Step 2: Remove the reference (cartId) from the User's Cart array
     const user = await User.findById(userId);
     if (user) {
-      // Remove the cartItem._id (cartId) from the user's Cart array
       user.Cart = user.Cart.filter(
         (cartId) => cartId.toString() !== cartItem._id.toString()
       );
-      await user.save(); // Save the updated user document
+      await user.save(); 
     }
-
-    // Return success response
     res.status(200).json({ message: "Item removed from cart successfully" });
   } catch (error) {
     console.error("Error removing item from cart:", error);
@@ -349,26 +356,44 @@ const getWishListdata = async (req, res) => {
     // Fetch the user and populate their Wishlist
     const user = await User.findById(userId).populate({
       path: 'WishList',
-      populate: { path: 'productId', model: 'Product' }, // Populate Product details inside Wishlist
+      populate: { path: 'productId', model: 'Product' }, 
     });
 
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Merge Wishlist and Product data
+
     const wishListData = user.WishList.map((wishItem) => {
-      const product = wishItem.productId; // Product details
+      const product = wishItem.productId; 
       return {
         wishlistId: wishItem._id,
         ...product.toObject()
       };
     });
 
-    res.status(200).json(wishListData); // Send the merged data
+    res.status(200).json(wishListData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+const removeWishList =async(req,res)=>{
+  try{
+       const userId=req.user.userId;
+       const {wishlistId}=req.body;
+       console.log('user',userId);
+       console.log('wish',wishlistId);
+       const user=await User.findById(userId);
+       if(!user) res.status(500).json({message:"user not found"});
+       const wish=await WishList.findByIdAndDelete(wishlistId);
+       if(!wish) res.status(500).json({message:"wishList not found"});
+       user.WishList = user.WishList.filter((data) => data._id.toString() !== wishlistId);
+      user.save();
+      res.status(200).json;
+  }
+  catch(err){
+   res.status(500).json({message:"not found"});
+  }
+}
 
 
 
@@ -386,5 +411,6 @@ module.exports = {
   loginUser,
   getcartdata,
   updataCartdata,
-  getWishListdata
+  getWishListdata,
+  removeWishList
 };

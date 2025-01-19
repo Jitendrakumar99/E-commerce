@@ -126,25 +126,29 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border: none;
 	
 }
+ input:focus {
+	outline: none;
+	border: 0px; 
+  }
 .FaSearch{
 	font-size: 25px;
 	margin-left: 5px;
 }
-.input input{
+.same input{
 	color: black;
 	outline: none;
 	border: none;
 	background-color: #F0F2F5;
-  font-size: 18px;
+    font-size: 18px;
   
 }
-input:active
+ input:active
 {
 	border: none;
 	outline: none;
-
 }
 
 .filterleft {

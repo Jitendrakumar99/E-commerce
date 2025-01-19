@@ -12,6 +12,9 @@ function Navbar() {
   const navigate = useNavigate();
   const { countwish, cartItems,WishlistItem, showuser, setshowuser } =
     useContext(AppContext);
+    useEffect(() => {
+    }, [WishlistItem])
+    
   const [useroption, setuseroption] = useState(false);
   const userlogin = localStorage.getItem("isLoggedIn");
   const usernamehandler = () => {
@@ -144,7 +147,7 @@ function Navbar() {
             {" "}
             <div className="hearthead">
               {" "}
-              <div className="wishShow">{countwish}</div>{" "}
+              <div className="wishShow">{WishlistItem.length}</div>{" "}
               <IoMdHeart fontSize={"30px"} />{" "}
             </div>
           </Link>

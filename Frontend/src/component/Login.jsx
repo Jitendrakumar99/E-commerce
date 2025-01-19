@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
-  const { showuser, setshowuser } = useContext(AppContext);
+  const { showuser, setshowuser,loginhandler } = useContext(AppContext);
   const [login_signup, setlogin_signup] = useState(true);
   const [showmessage, setshowmessage] = useState();
   const [signData, setsignData] = useState({
@@ -46,19 +46,10 @@ function Login() {
       });
   };
 
-  const loginSubmitHandler = (e) => {
+  const loginSubmitHandler =async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:9000/login", loginData)
-      .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("isLoggedIn", "true");
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.log("error");
-      });
+    await loginhandler(loginData)
+    navigate("/home");
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { FaArrowDown } from "react-icons/fa6";
 import axios from "axios";
 import "./Product.css";
@@ -32,7 +32,8 @@ function Card({ item }) {
     setwishlistItem,
     addToCart,
     addToWishList,
-    removeFromCart
+    removeFromCart,
+    removeFromWishList
   } = useContext(AppContext);
   const [addtocartbtnchange, setAddtocartchange] = useState(true);
   const [slickimageshow, setslickimageshow] = useState(false);
@@ -42,10 +43,15 @@ function Card({ item }) {
   const slickimagehandler1 = () => {
     setslickimageshow(false);
   };
+  const [heartcolor, setheartcolor] = useState(false);
   const check = () => {
     const itemExists = cartItems.some((data) => data._id === item._id);
     if (itemExists) {
       setAddtocartchange(false);
+    }
+    const WishExists = WishlistItem.some((data) => data._id === item._id);
+    if (WishExists) {
+      setheartcolor(true);
     }
   };
   useEffect(() => {
@@ -53,7 +59,7 @@ function Card({ item }) {
   }, [cartItems]);
 
 
-
+const navigate=useNavigate();
   const setitemid = (action, id) => {
     if (!id) return;
     const token = localStorage.getItem("token");
@@ -67,6 +73,7 @@ function Card({ item }) {
         quantity: 1,
       };
       addToCart(data,token);
+      navigate('/Cart')
       } 
       else if (action === "remove") {
       const data = {
@@ -80,47 +87,19 @@ function Card({ item }) {
   };
 
   
-  const [heartcolor, setheartcolor] = useState(false);
-  // toast.success("You are Successfully SignUp");
-  const heartcount = (item, id) => {
-    setheartcolor(!heartcolor);
-    heartcolor ? setwishlist(countwish - 1) : setwishlist(countwish + 1);
-    setwishlistItem((prev) => [...prev, item]);
+  const heartcount = (check,id) => {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("User not logged in");
       return;
     }
-    if (heartcolor) {
-      axios
-        .post(
-          "http://localhost:9000/add-to-wishlist",
-          { productId:id },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log("Response:", res);
-        })
-        .catch((err) => {
-          console.log("Error:", err);
-        });
-    } else {
-      axios
-        .post(
-          "http://localhost:9000/removewishdata",
-          { id: id.toString() },
-          { headers: { "Content-Type": "application/json" } }
-        )
-        .then((res) => {
-          console.log("Response:", res);
-        })
-        .catch((err) => {
-          console.log("Error:", err);
-        });
+    if(check=="add"){
+      addToWishList(id,token);
+      setheartcolor(true);
+    }
+    else{
+      removeFromWishList(id,token)
+      setheartcolor(false);
     }
   };
 
@@ -139,16 +118,19 @@ function Card({ item }) {
         >
           <img src={item.images[0] || item.images[1]} alt="" />
         </Link>
-        {/* {
-             countwish.map((data) => console.log(data))
-       } */}
 
-        <div
-          onClick={() => heartcount(item, item._id)}
-          className={heartcolor ? "heart1" : "heart"}
-        >
-          <IoMdHeart fontSize={"25px"} />
-        </div>
+        {
+  heartcolor ? (
+    <div onClick={() => heartcount("remove", item._id)} className="heart1">
+      <IoMdHeart fontSize={"25px"} />
+    </div>
+  ) : (
+    <div onClick={() => heartcount("add", item._id)} className="heart">
+      <IoMdHeart fontSize={"25px"} />
+    </div>
+  )
+}
+
       </div>
 
       <div className="cardright">

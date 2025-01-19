@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useContext } from 'react';
 import './App.css'
 import Navbar from './component/Navbar'
 import Layout from './component/Layout.jsx'
@@ -12,8 +12,9 @@ import Login from './component/Login.jsx';
 import ImageForm from './component/ImageForm.jsx';
 import ProfilePage from './component/ProfilePage.jsx';
 import OrderPage from './component/OrderPage.jsx';
+import { AppContext } from './context/Context.jsx';
 function App() {
-  
+  const {WishlistItem}=useContext(AppContext);
   return (
     <BrowserRouter>
     <Layout/>
@@ -22,7 +23,7 @@ function App() {
       <Route path='/' element={<Layout/>}></Route>
       <Route path='/home' element={<HomePage/>}></Route>
       <Route path='/Cart' element={<MainCart/>}></Route>
-      <Route path='/wishlist' element={<Wishlist/>}></Route>
+      <Route path='/wishlist' element={<Wishlist key={WishlistItem}/>}></Route>
       <Route path='/About' element={<About/>}></Route>
       <Route path='/detail' element={<ProductDetailPage/>}></Route>
       <Route path='/ImageForm' element={<ImageForm/>}></Route>
