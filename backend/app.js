@@ -22,10 +22,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-app.listen(9000,function()
+require("dotenv").config();
+const PORT = process.env.PORT||3000;
+const DB_URL = process.env.DB_URL;
+const SECRET_KEY = process.env.SECRET_KEY;
+STRIPE=process.env.STRIPE
+app.listen(PORT,function()
 {
   console.log('server_connect');
-  
 })
 
 app.use('/',route);
@@ -35,20 +39,13 @@ app.get('/',function(req,res)
   
 })
 
-mongoose.connect('mongodb+srv://jitendrasharma6839:asqxV5qUgm4xqwPu@cluster0.kqbc3.mongodb.net/DataBase')
-.then(res=>
-{
-  console.log('mongoose connect');
-  
-})
-.catch(err=>
-{
-  console.log(err);
-  
-})
+mongoose.connect(DB_URL)
+  .then(() => console.log('Database connected successfully'))
+  .catch((error) => console.error('Database connection error:', error));
 
-// require("dotenv").config();
-const stripe = require("stripe")('sk_test_51QZaZSDXUaiBwbhKhGxPdqR33FQfZclDaY9BoaJ3m9S15x1kmGdigNpYfO4p3bsEP6ZHro3J5Vq6TPJrXAZhmIE000n4XSBRgL');
+
+
+const stripe = require("stripe")(STRIPE);
 app.post("/getcheckoutdata", async (req, res) => {
   const { products } = req.body;
  console.log(products);
@@ -80,8 +77,8 @@ app.post("/getcheckoutdata", async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:3000/",
-      cancel_url: "http://localhost:3000/",
+      success_url: "http://localhost:5173/SuccessMessage",
+      cancel_url: "http://localhost:9000/",
     });
 
     res.json({ id: session.id });

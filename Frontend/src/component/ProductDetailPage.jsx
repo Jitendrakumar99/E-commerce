@@ -7,9 +7,10 @@ import PriceDetails from './PriceDetails ';
 import { MdLocalOffer } from "react-icons/md";
 import { ImLocation2 } from "react-icons/im";
 import { toast } from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 import '../component/Card.css'
 function ProductDetailPage() {
-	const {productinfo ,setCartItems,cartItems,product}=useContext(AppContext);
+	const {productinfo ,setCartItems,cartItems,product,addToCart}=useContext(AppContext);
 	console.log(productinfo);
   function dis(v, v1) {
     return (v - (v1 * v) / 100).toFixed(1);
@@ -33,23 +34,25 @@ function ProductDetailPage() {
 	  // State to manage the product quantity
 	  const [quantity, setQuantity] = useState(1);
     const [showprice,setShowprice]=useState(false);
-	
+	  const navigate=useNavigate();
 	  // Function to handle the Add to Cart action
-    const [addtocartbtnchange1,setAddtocartchange1]=useState(true);
+    const [addtocartbtnchange1,setAddtocartchange1]=useState(productinfo.update);
     const setitemid = (id) => {
       if (id) {
-        const newItem = product.find(item => item._id === id);
-        newItem && setCartItems(prevItems => [...prevItems, newItem]);
+        const token=localStorage.getItem('token');
+        const data = {
+          productId: id,
+          quantity: 1,
+        };
+        addToCart(data,token);
       }
       toast.success("Item is Added to Cart");
       setAddtocartchange1(false);
     };
     const setitemid1 = (id) => {
       if (id) {
-        const newItem = cartItems.filter(item => item._id != id);
-        newItem && setCartItems(newItem);
+        navigate('/Cart')
       }
-      toast.success("Item is Remove form Cart");
       setAddtocartchange1(true);
     };
 	
@@ -60,7 +63,7 @@ function ProductDetailPage() {
 	const [imgindex,setImgindex]=useState(0);
   const defaultOptions = {
     reverse:        false,  // reverse the tilt direction
-    max:            35,     // max tilt rotation (degrees)
+    max:            2,     // max tilt rotation (degrees)
     perspective:    1000,   // Transform perspective, the lower the more extreme the tilt gets.
     scale:          1.1,    // 2 = 200%, 1.5 = 150%, etc..
     speed:          2000,   // Speed of the enter/exit transition
@@ -144,7 +147,7 @@ function ProductDetailPage() {
         <button onClick={() => setitemid(productinfo._id)} className="button bg-green-500">
           Add to Cart
         </button>:<button onClick={() => setitemid1(productinfo._id)} className="button bg-red-400 hover:bg-red-500">
-        Remove form Cart
+            Go to Cart
         </button>}
           <button className="button buy-now" onClick={handleBuyNow}>Buy Now</button>
         </div>

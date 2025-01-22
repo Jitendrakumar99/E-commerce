@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from 'react'
+import React, { useContext,useEffect, useState } from 'react'
 import { AppContext } from '../context/Context'
 import { FaArrowDown } from "react-icons/fa6";
 import { FaPercent } from "react-icons/fa";
@@ -10,7 +10,7 @@ import Lottie  from 'lottie-react';
 function Wishlist() {
 const {WishlistItem,setwishlistItem,setwishlist,countwish,removeFromWishList}=useContext(AppContext);
 // console.log("wish",WishlistItem);
-
+const [rendercomponent,setrendercomponent]=useState("");
 function price(v) {
 	const pr = v.toFixed(0);
 	return pr;
@@ -19,14 +19,15 @@ function price(v) {
 	return (v1 - (v1 * v) / 100).toFixed(1);
   }
 
-const removeitemHandler=(id)=>
+const removeitemHandler=async(id)=>
 {
    const token=localStorage.getItem('token');
-   removeFromWishList(id,token);
+   const render=await removeFromWishList(id,token);
+   setrendercomponent(render);
 }
-useEffect(() => {
-}, [WishlistItem])
-
+useEffect(()=>{
+setrendercomponent("")
+},[])
 
 if(WishlistItem.length===0)
 {

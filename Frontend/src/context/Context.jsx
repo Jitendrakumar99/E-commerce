@@ -213,12 +213,13 @@ useEffect(() => {
   } 
 }, [cartItems]);
  
-
+const [loginres,setloginres]=useState();
 const Loginhandler=async(loginData)=>{
   axios
   .post("http://localhost:9000/login", loginData)
   .then((res) => {
     console.log(res);
+    setloginres(res);
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("isLoggedIn", "true");
     
@@ -227,11 +228,10 @@ const Loginhandler=async(loginData)=>{
     console.log("error");
   });
 }
-const render=localStorage.getItem('isLoggedIn');
-if(render){
-useEffect(() => {
-}, [])
-}
+
+
+
+const [wishrender,setwishrender]=useState();
 const AddToWishList=async(id,token)=>{
   axios
   .post(
@@ -244,12 +244,16 @@ const AddToWishList=async(id,token)=>{
     }
   )
   .then((res) => {
+    setwishrender(res)
     console.log("Response:", res);
   })
   .catch((err) => {
     console.log("Error:", err);
   });
 }
+useEffect(()=>{
+fetchWishListdata();
+},[wishrender])
 const RemoveFromWishList=async(id,token)=>{
   axios
   .post(
@@ -262,6 +266,7 @@ const RemoveFromWishList=async(id,token)=>{
     }
   )
   .then((res) => {
+    setwishrender(res)
     console.log("Response:", res);
   })
   .catch((err) => {
@@ -334,7 +339,8 @@ const RemoveFromCart=async(data,token)=>{
     fetchcartdata();
     fetchUserData();
     fetchWishListdata();
-  }, [])
+  
+  }, [loginres])
 
   const Add_address=async(addressdata,token)=>{
       axios.post('http://localhost:9000/add-address',

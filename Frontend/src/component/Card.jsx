@@ -102,15 +102,41 @@ const navigate=useNavigate();
       setheartcolor(false);
     }
   };
-
-  // const {setwishlist,countwish}=useContext(AppContext);
+  const [loading, setLoading] = useState(true);
+  const [productData, setProductData] = useState([]);
+  useEffect(() => {
+    
+    setTimeout(() => {
+      setProductData(item); 
+      setLoading(false); 
+    }, 2000); // 
+  }, [item]);
+  const LoadingCard = () => (
+    // <div class="shimmer-effect">
+    <div className="card skeleton-card shimmer-effect">
+      <div className="cardleft">
+        <div className="skeleton skeleton-image"></div>
+      </div>
+      <div className="cardright">
+        <div className="skeleton skeleton-title"></div>
+        <div className="skeleton skeleton-rating"></div>
+        <div className="skeleton skeleton-price"></div>
+        <div className="skeleton skeleton-button"></div>
+      </div>
+    </div>
+    // </div>
+  );
+ 
   return (
     // <Tilt className="tilt" tiltReverse={true} scale={1.1} z-Index={999} transitionSpeed={2500}>
-
+<>
+{loading
+        ? Array.from({ length: 1 }).map((_, index) => <LoadingCard key={index} />)
+        : 
     <div key={item._id} className="card">
       <div className="cardleft ">
         <Link
-          onClick={() => setProductinfo(item)}
+          onClick={() => setProductinfo({...item,update:addtocartbtnchange})}
           onMouseEnter={slickimagehandler}
           onMouseLeave={slickimagehandler1}
           className="link cursor-pointer"
@@ -171,6 +197,8 @@ const navigate=useNavigate();
         )}
       </div>
     </div>
+}
+    </>
     // </Tilt>
   );
 }

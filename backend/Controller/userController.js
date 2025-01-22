@@ -8,8 +8,7 @@ const Product = require("../models/Product/ProductData");
 const Address=require('../models/User/Address')
 const { userInfo } = require("os");
 require("dotenv").config();
-const JWT_SECRET =
-  "6af03552ef42f5de7271ac3d968a7dae51cb49cb214b28cd62ad0e0ee6e6c1956dcfc695d52cc8e50941390e2b07675f6acdcfb09fe99ec6ec36b2287512a3c8";
+
 const createUser = async (req, res) => {
   const { Email, Password, confirmpassword, Phone, FirstName, LastName } =
     req.body;
@@ -46,6 +45,7 @@ const createUser = async (req, res) => {
 };
 const loginUser = async (req, res) => {
   const { Email, Password } = req.body;
+  const JWT_SECRET = await process.env.JWT_SECRET;
   try {
     const user = await User.findOne({ Email });
     if (!user) {

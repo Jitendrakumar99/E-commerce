@@ -13,6 +13,7 @@ import ImageForm from './component/ImageForm.jsx';
 import ProfilePage from './component/ProfilePage.jsx';
 import OrderPage from './component/OrderPage.jsx';
 import { AppContext } from './context/Context.jsx';
+import SuccessMessage from './component/SuccessMessage.jsx';
 function App() {
   const {WishlistItem}=useContext(AppContext);
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path='/ImageForm' element={<ImageForm/>}></Route>
       <Route path='/profile' element={<ProfilePage/>}></Route>
       <Route path='/order' element={<OrderPage/>}></Route>
+      <Route path='/SuccessMessage' element={<SuccessMessage/>}></Route>
     </Routes>
     </BrowserRouter>
   )
