@@ -8,7 +8,6 @@ const Product = require("../models/Product/ProductData");
 const Address=require('../models/User/Address')
 const { userInfo } = require("os");
 require("dotenv").config();
-
 const createUser = async (req, res) => {
   const { Email, Password, confirmpassword, Phone, FirstName, LastName } =
     req.body;
