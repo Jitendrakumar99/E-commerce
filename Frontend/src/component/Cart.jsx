@@ -9,7 +9,7 @@ import CheckoutForm from "./Checkout";
 import axios from 'axios'
 
 function Cart({item}) {
-  const {setCartItems,cartItems,TotalPrice,setTotalPrice,TotalDisPrice,setTotalDisPrice,Quantity,setQuantity}=useContext(AppContext)
+  const {setCartItems,cartItems,TotalPrice,setTotalPrice,TotalDisPrice,Url,setTotalDisPrice,Quantity,setQuantity}=useContext(AppContext)
   const [value, setValue] = useState(1);
 
   async function addCart(quantity) {
@@ -19,7 +19,7 @@ function Cart({item}) {
     };
   
     try {
-      const res = await axios.post("http://localhost:9000/updataCartdata", data);
+      const res = await axios.post(`${Url}updataCartdata`, data);
       console.log("Cart updated:", res.data);
     } catch (err) {
       console.error("Error updating cart:", err);
@@ -65,7 +65,7 @@ function Cart({item}) {
       const updatedCartItems = cartItems.filter((chosen) => chosen._id !== id);
       setCartItems(updatedCartItems);
     }
-    axios.post("http://localhost:9000/removecartdata", 
+    axios.post(`${Url}removecartdata`, 
       { id: id.toString() },
       { headers: { 'Content-Type': 'application/json' } }
     )

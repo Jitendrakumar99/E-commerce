@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
-  const { showuser, setshowuser,loginhandler } = useContext(AppContext);
+  const { showuser, setshowuser,loginhandler,Url } = useContext(AppContext);
   const [login_signup, setlogin_signup] = useState(true);
   const [showmessage, setshowmessage] = useState();
   const [signData, setsignData] = useState({
@@ -35,7 +35,7 @@ function Login() {
 
   const submithandler = async () => {
     axios
-      .post("http://localhost:9000/Auth", signData)
+      .post(`${Url}Auth`, signData)
       .then((res) => {
         console.log(res);
         setshowmessage("");

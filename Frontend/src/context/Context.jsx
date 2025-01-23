@@ -16,7 +16,7 @@ export const AppContext=createContext({
 export default function AppContextProvider({children}) {
 	const [counter ,setcounter]=useState(10);
    
-  const [Url,setUrl]=useState();
+  const [Url,setUrl]=useState('https://e-commerce-backend-czqd.onrender.com/');
   const [data,setData]=useState(null);
   const [lod,setloader]=useState(true)
   const [Filter,setfilter]=useState(null);
@@ -34,12 +34,13 @@ export default function AppContextProvider({children}) {
  const [WishlistItem,setwishlistItem]=useState([]);
  const [itemid,setitemid]=useState([]);
  const [showuser, setshowuser] = useState(localStorage.getItem('username') || '');
+
  // let api=`https://dummyjson.com/products${Url}`
  // const response = await fetch(api);
  // const data =await response.json();
  async function fetchdata() {
   try {
-    const response = await axios.get('http://localhost:9000/getProduct');
+    const response = await axios.get(`${Url}getProduct`);
     console.log(response);
     setData(response.data);
   } catch (err) {
@@ -216,7 +217,7 @@ useEffect(() => {
 const [loginres,setloginres]=useState();
 const Loginhandler=async(loginData)=>{
   axios
-  .post("http://localhost:9000/login", loginData)
+  .post(`${Url}login`, loginData)
   .then((res) => {
     console.log(res);
     setloginres(res);
@@ -235,7 +236,7 @@ const [wishrender,setwishrender]=useState();
 const AddToWishList=async(id,token)=>{
   axios
   .post(
-    "http://localhost:9000/add-to-wishlist",
+    `${Url}add-to-wishlist`,
     { productId:id },
     {
       headers: {
@@ -257,7 +258,7 @@ fetchWishListdata();
 const RemoveFromWishList=async(id,token)=>{
   axios
   .post(
-    "http://localhost:9000/remove-form-wishlist",
+    `${Url}remove-form-wishlist`,
     { wishlistId:id },
     {
       headers: {
@@ -275,7 +276,7 @@ const RemoveFromWishList=async(id,token)=>{
 }
 const RemoveFromCart=async(data,token)=>{
   axios
-  .post("http://localhost:9000/removeFromCart", data, {
+  .post(`${Url}removeFromCart`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -294,7 +295,7 @@ const RemoveFromCart=async(data,token)=>{
   const AddToCart =async (data,token) => {
     console.log("testing", data);
     axios
-        .post("http://localhost:9000/add-to-cart", data, {
+        .post(`${Url}add-to-cart`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -320,7 +321,7 @@ const RemoveFromCart=async(data,token)=>{
         console.error('User is not authenticated');
         return;
       }
-      const response = await axios.get('http://localhost:9000/user/profile', {
+      const response = await axios.get(`${Url}user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -343,7 +344,7 @@ const RemoveFromCart=async(data,token)=>{
   }, [loginres])
 
   const Add_address=async(addressdata,token)=>{
-      axios.post('http://localhost:9000/add-address',
+      axios.post(`${Url}add-address`,
         {
           addressdata
         },
@@ -367,7 +368,7 @@ const RemoveFromCart=async(data,token)=>{
      const token=localStorage.getItem('token');
      if(!token)
       { console.log("token not recieve"); return;}
-     const response=await axios.get("http://localhost:9000/getcartdata",{
+     const response=await axios.get(`${Url}getcartdata`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -386,7 +387,7 @@ const RemoveFromCart=async(data,token)=>{
      const token=localStorage.getItem('token');
      if(!token)
       { console.log("token not recieve"); return;}
-     const response=await axios.get("http://localhost:9000/getWishListdata",{
+     const response=await axios.get(`${Url}getWishListdata`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -407,7 +408,7 @@ const RemoveFromCart=async(data,token)=>{
 
 let product=clone||data;  
 const value={
-        counter,setcounter,countwish,setwishlist,product,UserData,setUrl,lod,setfilter,pricerange,rating,fetchdata,disPer,clone,setrating,DiscountP,
+        counter,setcounter,countwish,setwishlist,product,UserData,Url,lod,setfilter,pricerange,rating,fetchdata,disPer,clone,setrating,DiscountP,
 		cartItems, setCartItems,TotalPrice,setTotalPrice,TotalDisPrice,setTotalDisPrice,Quantity,setQuantity,productinfo,setProductinfo,WishlistItem,setwishlistItem,
     showuser,setshowuser,
     addToCart: AddToCart,

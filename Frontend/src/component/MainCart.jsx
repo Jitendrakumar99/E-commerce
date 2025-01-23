@@ -6,7 +6,7 @@ import EmptyCart from "./EmptyCart";
 import { toast } from "react-hot-toast";
 import {loadStripe} from '@stripe/stripe-js';
 function MainCart() {
-	const {setCartItems,cartItems,TotalPrice,TotalDisPrice,Quantity,setQuantity,data}=useContext(AppContext)
+	const {setCartItems,cartItems,TotalPrice,TotalDisPrice,Quantity,setQuantity,data,Url}=useContext(AppContext)
 	console.log("work");
 
     // payment integration
@@ -22,7 +22,7 @@ function MainCart() {
       const headers = {
           "Content-Type":"application/json"
       }
-      const response = await fetch("http://localhost:9000/getcheckoutdata",{
+      const response = await fetch(`${Url}getcheckoutdata`,{
           method:"POST",
           headers:headers,
           body:JSON.stringify(body)
