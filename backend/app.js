@@ -26,6 +26,7 @@ require("dotenv").config();
 const PORT = process.env.PORT||3000;
 const DB_URL = process.env.DB_URL;
 const SECRET_KEY = process.env.SECRET_KEY;
+const API=process.env.API;
 STRIPE=process.env.STRIPE
 app.listen(PORT,function()
 {
@@ -77,7 +78,7 @@ app.post("/getcheckoutdata", async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:5173/SuccessMessage",
+      success_url: `${API}SuccessMessage`,
       cancel_url: "http://localhost:9000/",
     });
 
