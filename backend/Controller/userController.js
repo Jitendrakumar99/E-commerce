@@ -1,11 +1,12 @@
 const User = require("../models/User/MainUserSchema");
 const bcrypt = require("bcrypt");
-const Cart = require("../models/User/cartSchema ");4
+const Cart = require("../models/User/cartSchema ");
 const WishList=require('../models/User/wishlistSchema ')
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Product = require("../models/Product/ProductData");
-const Address=require('../models/User/Address')
+const Address=require('../models/User/Address');
+const OrderListData=require('../models/User/OrderList')
 const { userInfo } = require("os");
 require("dotenv").config();
 const createUser = async (req, res) => {
@@ -394,6 +395,71 @@ const removeWishList =async(req,res)=>{
   }
 }
 
+const clearUserCart = async (req, res) => {
+  try {
+    const userId = req.user.userId; 
+    
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is missing" });
+    }
+    console.log('yes fined');
+
+    console.log("Clearing cart for user:", userId);
+
+    await User.findByIdAndUpdate(userId, { $set: { Cart: [] } });
+
+    console.log("✅ Cart cleared successfully");
+    return res.status(200).json({ message: "Cart cleared successfully" });
+  } catch (error) {
+    console.error("❌ Error clearing cart:", error);
+    return res.status(500).json({ error: "Failed to clear cart" });
+  }
+};
+
+const storeOrder = async (req, res) => {
+  try {
+    const orderData = req.body;
+    const userId = req.user.userId; 
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!orderData || Object.keys(orderData).length === 0) {
+      return res.status(400).json({ error: "Order data is required" });
+    }
+
+    const newOrder = new OrderListData({
+      title: orderData.title,
+      description: orderData.description,
+      brand: orderData.brand,
+      category: orderData.category,
+      price: orderData.price,
+      discountPercentage: orderData.discountPercentage,
+      rating: orderData.rating,
+      shippingInformation: orderData.shippingInformation,
+      returnPolicy: orderData.returnPolicy,
+      stock: orderData.stock,
+      quantity: orderData.quantity,
+      warrantyInformation: orderData.warrantyInformation,
+      cartId: orderData.cartId,
+      availabilityStatus: orderData.availabilityStatus,
+      sku: orderData.sku,
+      dimensions: orderData.dimensions,
+      tags: orderData.tags,
+      images: orderData.images,
+    });
+
+    await newOrder.save();
+    user.OrderList.push(newOrder._id);
+    await user.save();
+    return res.status(200).json({ message: "Order stored successfully", newOrder });
+  } catch (error) {
+    console.error("Error storing order:", error);
+    return res.status(500).json({ error: "Failed to store order" });
+  }
+};
+
+
 
 
 module.exports = {
@@ -411,5 +477,7 @@ module.exports = {
   getcartdata,
   updataCartdata,
   getWishListdata,
-  removeWishList
+  removeWishList,
+  clearUserCart,
+  storeOrder
 };

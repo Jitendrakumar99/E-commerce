@@ -6,9 +6,9 @@ import { IoIosArrowDropright } from "react-icons/io";
 
 const Sidebar = ({collapsed,onToggleSidebar} ) => {
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : 'expanded'}`} >
-      <ul className="nav flex-column">
-        <li className="nav-item">
+    <div className={`sidebar  ${collapsed ? 'collapsed' : 'expanded'}`}  >
+      <ul className="nav flex-column  position-fixed ">
+        <li className={`nav-item   ${collapsed ? 'w-[50px]' : 'w-[200px]'}`} >
         <div onClick={onToggleSidebar}  className="Arrowbox">{collapsed?<IoIosArrowDropleft />:<IoIosArrowDropright />}
 
         </div>
@@ -27,6 +27,12 @@ const Sidebar = ({collapsed,onToggleSidebar} ) => {
           <Link to="/edit-item" className="nav-link">
             <i className="bi bi-pencil-square"></i>
             {!collapsed && <span> Edit Item</span>}
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/image" className="nav-link">
+          <i class="bi bi-card-image"></i>
+            {!collapsed && <span>ImageGallery</span>}
           </Link>
         </li>
         <li className="nav-item">

@@ -2,9 +2,18 @@ const express=require('express')
 const Route=express.Router();
 const ProductData=require('../Controller/ProductDataController');
 const GetProduct=require('../Controller/Getdata/Products')
+const updateProduct=require('../Controller/Admincontroller/updataProduct')
+const deleteProduct=require('../Controller/Admincontroller/deleteProduct')
+const ImageGallary=require('../Controller/Admincontroller/Imagegalarry')
+const GetImagedata=require('../Controller/Admincontroller/GetImages')
 Route.post('/AddProduct',ProductData.insertProduct);
+Route.post('/imageGallary',ImageGallary.Imagehandle);
 Route.get('/getProduct',GetProduct.GetProduct);
+Route.get('/getimage',GetImagedata.GetImagedata);
+Route.put('/updataproduct',updateProduct.updateProduct);
+Route.delete('/deleteProduct',deleteProduct.deleteProduct);
 const authenticate = require('../Controller/middleware/authenticate');
+const {getProductData}=require('../Controller/Admincontroller/getProductdata')
 const {
   createUser,
   getAllUsers,
@@ -20,7 +29,9 @@ const {
   getcartdata,
   updataCartdata,
   getWishListdata,
-  removeWishList
+  removeWishList,
+  clearUserCart,
+  storeOrder
 } = require('../Controller/userController');
 
 
@@ -39,6 +50,8 @@ Route.get('/getWishListdata',authenticate, getWishListdata);
 Route.post('/updataCartdata', updataCartdata);
 Route.post('/add-to-wishlist',authenticate, addToWishlist);
 Route.post('/remove-form-wishlist',authenticate, removeWishList);
-
+Route.get('/getalldata',getProductData);
+Route.post('/clearUserCart',authenticate,clearUserCart);
+Route.post('/storeOrder',authenticate,storeOrder);
 
 module.exports=Route;

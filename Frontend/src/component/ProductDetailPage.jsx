@@ -75,8 +75,8 @@ function ProductDetailPage() {
   
 
   return (
-	<div className="product-container">
-      <div className="product-images border-gray-300 border flex justify-center items-center">
+	<div className="product-container sm:flex-col md:flex-row flex-col">
+      <div className="product-images border-gray-300 border flex justify-center items-center w-full">
      <Tilt options={defaultOptions} className="tilt">
         <img  src={productinfo.images[imgindex]||productinfo.images[imgindex]||productinfo.images[2]} alt={productinfo.title} className="product-main-image" />
         </Tilt>
@@ -96,7 +96,7 @@ function ProductDetailPage() {
 		</div>
       </div>
       
-      <div className="product-details overflow-y-scroll scroll-smooth scrollbar-hide  h-[100vh]">
+      <div className="product-details overflow-y-scroll scroll-smooth scrollbar-hide w-full h-[100vh]">
         <h1>{products.title}</h1>
         <div className="product-rating flex gap-5">
           <span className="rating">{products.rating} ★</span>

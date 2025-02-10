@@ -29,6 +29,7 @@ const MainUserSchema=new mongoose.Schema({
 	PaymentMethod :[{ type:mongoose.Schema.Types.ObjectId, ref: 'PaymentMethod' }],
 	orderHistory :[{ type:mongoose.Schema.Types.ObjectId, ref: 'Order' }],
 	Cart: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Cart' }],
+	OrderList: [{ type:mongoose.Schema.Types.ObjectId, ref: 'OrderList' }],
 	WishList: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Wishlist' }],
 	isVerified: { type: Boolean, default: false },
 },

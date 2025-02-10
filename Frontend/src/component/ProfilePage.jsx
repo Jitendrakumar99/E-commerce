@@ -3,6 +3,7 @@ import { Form, useNavigate } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoMdLocate } from "react-icons/io";
 import { AppContext } from "../context/Context";
+import { FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import "./ProfilePage.css";
 function ProfilePage() {
@@ -107,7 +108,23 @@ function ProfilePage() {
       adtype: "",
     });
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const name = localStorage.getItem("username");
+  // const [name, setName] = useState("Jitendra Kumar");
+  const [email, setEmail] = useState("jitendrsharma@gmail.com");
+  const [phone, setPhone] = useState("6299607595");
+  const [profileImage, setProfileImage] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -170,28 +187,91 @@ function ProfilePage() {
       <div className="flex-1 p-8">
         {/* Profile Section */}
         {activeSection === "profile" && (
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-              Profile Details
-            </h2>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <label className="text-gray-700">Full Name</label>
-                <p className="text-gray-600">{name}</p>
-              </div>
-              <div className="flex justify-between">
-                <label className="text-gray-700">Email</label>
-                <p className="text-gray-600">jitendrsharma@gmail.com</p>
-              </div>
-              <div className="flex justify-between">
-                <label className="text-gray-700">Phone</label>
-                <p className="text-gray-600">6299607595</p>
-              </div>
-            </div>
-            <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-              Edit Profile
-            </button>
-          </div>
+           <div className="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
+           <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+             Profile Details
+           </h2>
+     
+           {/* Profile Image Upload */}
+           <div className="flex flex-col items-center mb-4">
+             <label htmlFor="profileImageUpload" className="cursor-pointer relative">
+               {profileImage ? (
+                 <img
+                   src={profileImage}
+                   alt="Profile"
+                   className="w-24 h-24 rounded-full border-2 border-gray-300 object-cover"
+                 />
+               ) : (
+                 <FaUserCircle className="w-24 h-24 text-gray-400" />
+               )}
+               <input
+                 type="file"
+                 id="profileImageUpload"
+                 accept="image/*"
+                 className="hidden"
+                 onChange={handleImageChange}
+               />
+             </label>
+             <p className="text-gray-500 text-sm mt-2">Click to change photo</p>
+           </div>
+     
+           {/* User Info */}
+           <div className="space-y-4">
+             <div className="flex justify-between">
+               <label className="text-gray-700">Full Name</label>
+               {isEditing ? (
+                 <input
+                   type="text"
+                   className="border px-2 py-1 rounded-md w-2/3"
+                   value={name}
+                   onChange={(e) => setName(e.target.value)}
+                 />
+               ) : (
+                 <p className="text-gray-600">{name}</p>
+               )}
+             </div>
+     
+             <div className="flex justify-between">
+               <label className="text-gray-700">Email</label>
+               {isEditing ? (
+                 <input
+                   type="email"
+                   className="border px-2 py-1 rounded-md w-2/3"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}
+                 />
+               ) : (
+                 <p className="text-gray-600">{email}</p>
+               )}
+             </div>
+     
+             <div className="flex justify-between">
+               <label className="text-gray-700">Phone</label>
+               {isEditing ? (
+                 <input
+                   type="tel"
+                   className="border px-2 py-1 rounded-md w-2/3"
+                   value={phone}
+                   onChange={(e) => setPhone(e.target.value)}
+                 />
+               ) : (
+                 <p className="text-gray-600">{phone}</p>
+               )}
+             </div>
+           </div>
+     
+           {/* Edit / Save Button */}
+           <button
+             className="mt-4 w-full py-2 text-white rounded-md transition duration-300"
+             style={{
+               backgroundColor: isEditing ? "green" : "#2563EB",
+               hover: { backgroundColor: isEditing ? "darkgreen" : "#1E40AF" },
+             }}
+             onClick={() => setIsEditing(!isEditing)}
+           >
+             {isEditing ? "Save Changes" : "Edit Profile"}
+           </button>
+         </div>
         )}
         {/* Orders Section */}
         {activeSection === "orders" && (

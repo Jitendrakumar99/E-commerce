@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import { AppContext } from '../context/Context'
 import Cart from './Cart'
 import '../component/MainCart.css'
 import EmptyCart from "./EmptyCart";
 import { toast } from "react-hot-toast";
 import {loadStripe} from '@stripe/stripe-js';
+import axios from 'axios';
 function MainCart() {
 	const {setCartItems,cartItems,TotalPrice,TotalDisPrice,Quantity,setQuantity,data,Url}=useContext(AppContext)
 	console.log("work");
+console.log(cartItems);
 
     // payment integration
     const paynow = async()=>{
@@ -26,20 +28,35 @@ function MainCart() {
           method:"POST",
           headers:headers,
           body:JSON.stringify(body)
-      });
+      })
+      const token = localStorage.getItem("token");
+      axios.post(`${Url}clearUserCart`, {
+          headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => console.log("Cart cleared:", res))
+      .catch((error) => console.log("Cart clear error:", error));
+      if (response.status === 200) {
+        const session = await response.json();
 
-      const session = await response.json();
+        console.log(session.message); // Log the success message
 
-      const result = stripe.redirectToCheckout({
-          sessionId:session.id
-      });
+        const result = await stripe.redirectToCheckout({
+            sessionId: session.id
+        });
+
+
+        
+        if (result.error) {
+            console.log(result.error);
+        }
+    }
       
-      if(result.error){
-          console.log(result.error);
-      }
-      toast.success("Order is Placed Successfully.")
-  }
+    }
+  
 
+
+  
+  
 	
 		if(cartItems.length===0)
 			{

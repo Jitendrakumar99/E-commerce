@@ -80,7 +80,9 @@ const navigate=useNavigate();
         productId: id,
       };
       removeFromCart(data,token)
-    } else {
+    } 
+    else
+    {
       console.error("Invalid action provided:", action);
       toast.error("Invalid action");
     }

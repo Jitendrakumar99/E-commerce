@@ -16,7 +16,8 @@ export const AppContext=createContext({
 export default function AppContextProvider({children}) {
 	const [counter ,setcounter]=useState(10);
    
-  const [Url,setUrl]=useState('https://e-commerce-backend-czqd.onrender.com/');
+  // const [Url,setUrl]=useState('https://e-commerce-backend-czqd.onrender.com/');
+  const [Url,setUrl]=useState('http://localhost:9000/');
   const [data,setData]=useState(null);
   const [lod,setloader]=useState(true)
   const [Filter,setfilter]=useState(null);
@@ -69,7 +70,7 @@ export default function AppContextProvider({children}) {
         // console.log(filterdata);
         setClone(filterdata)
         }
-        else if(Filter=="500to1000")
+        else if(Filter=="500to1000")  
         {
           const temp=[...data]
           const filterdata=temp.filter((value)=>value.price>10&&value.price<50);
@@ -135,41 +136,41 @@ export default function AppContextProvider({children}) {
 // console.log(Filter);
 const pricerange=[
   {
-    name:"lessthen500",
+    name:10,
     name1:"Less then 10"
   },
   {
-    name:"500to1000",
-    name1:"10 to 50"
+    name:50,
+    name1:"Less then 50"
   },
   {
-    name:"1000to5000",
-    name1:"50 to 100"
+    name:100,
+    name1:"Less then 100"
   },
   {
-    name:"5000to10000",
-    name1:"100 to 500"
+    name:500,
+    name1:"Less then500"
   },
   {
-    name:"greater10000",
+    name:1000,
     name1:"greater then 1000"
   },
 ]
 const DiscountP=[
   {
-    name:"less then 5%",
+    name:"Greater then 5%",
     name1:5
   },
   {
-    name:"less then 10%",
+    name:"Greater then 10%",
     name1:10
   },
   {
-    name:"less then 15%",
+    name:"Greater then 15%",
     name1:15
   },
   {
-    name:"less then 20%",
+    name:"Greater then 20%",
     name1:20
   }
 ]

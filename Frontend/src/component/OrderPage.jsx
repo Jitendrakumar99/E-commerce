@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// Sample order data (you can replace this with dynamic data from an API)
 const orders = [
   {
     orderId: '12345',
@@ -38,16 +37,17 @@ function OrderPage() {
   const [filteredStatus, setFilteredStatus] = useState('All');
   const [filteredTime, setFilteredTime] = useState('All');
 
-  const filteredOrders = orders.filter((order) => {
-    if (filteredStatus !== 'All' && order.status !== filteredStatus) return false;
-    if (filteredTime !== 'All' && order.orderTime.split(' ')[0] !== filteredTime) return false;
-    return true;
+  const orderDates = ['All', ...new Set(orders.map(order => order.orderTime.split(' ')[0]))];
+
+  const filteredOrders = orders.filter(order => {
+    return (filteredStatus === 'All' || order.status === filteredStatus) &&
+           (filteredTime === 'All' || order.orderTime.startsWith(filteredTime));
   });
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-1/4 bg-gray-100 p-6">
+      <div className="w-1/4 bg-white p-6 shadow-md">
         <h2 className="text-xl font-semibold mb-4">Filters</h2>
 
         {/* Order Status Filter */}
@@ -65,7 +65,7 @@ function OrderPage() {
           </select>
         </div>
 
-        {/* Order Time Filter */}
+        {/* Order Date Filter */}
         <div>
           <h3 className="font-medium">Order Date</h3>
           <select
@@ -73,10 +73,9 @@ function OrderPage() {
             value={filteredTime}
             onChange={(e) => setFilteredTime(e.target.value)}
           >
-            <option value="All">All</option>
-            <option value="2024-12-20">2024-12-20</option>
-            <option value="2024-12-21">2024-12-21</option>
-            <option value="2024-12-22">2024-12-22</option>
+            {orderDates.map(date => (
+              <option key={date} value={date}>{date}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -89,16 +88,16 @@ function OrderPage() {
           <p className="text-gray-500">No orders found.</p>
         ) : (
           filteredOrders.map((order) => (
-            <div key={order.orderId} className="bg-white shadow-md rounded-lg p-6 mb-6">
-              <div className="flex justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Order #{order.orderId}</h2>
+            <div key={order.orderId} className="bg-white shadow-lg rounded-lg p-6 mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Order #{order.orderId}</h2>
                 <span
-                  className={`text-sm font-medium ${
+                  className={`px-3 py-1 text-sm font-medium rounded-full ${
                     order.status === 'Delivered'
-                      ? 'text-green-600'
+                      ? 'bg-green-100 text-green-700'
                       : order.status === 'Pending'
-                      ? 'text-yellow-600'
-                      : 'text-blue-600'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'bg-blue-100 text-blue-700'
                   }`}
                 >
                   {order.status}
@@ -107,22 +106,23 @@ function OrderPage() {
 
               <div className="space-y-4">
                 {order.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded-md" />
-                    <p className="text-gray-700">{item.name}</p>
-                    <p className="text-gray-600">₹{item.price}</p>
-                    <p className="text-gray-600">Qty: {item.quantity}</p>
-                    <p className="text-gray-600">₹{item.price * item.quantity}</p>
+                  <div key={index} className="flex items-center gap-4 border-b pb-3">
+                    <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-md" />
+                    <div className="flex-1">
+                      <p className="text-gray-800 font-medium">{item.name}</p>
+                      <p className="text-gray-600 text-sm">Qty: {item.quantity}</p>
+                    </div>
+                    <p className="text-gray-600 font-medium">₹{item.price * item.quantity}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex justify-between mt-4 font-semibold">
-                <p className="text-lg">Total</p>
-                <p className="text-lg">₹{order.total}</p>
+              <div className="flex justify-between mt-4 font-semibold text-lg">
+                <p>Total</p>
+                <p>₹{order.total}</p>
               </div>
 
-              <div className="mt-4 text-sm text-gray-500">Ordered on: {order.orderTime}</div>
+              <div className="mt-3 text-sm text-gray-500">Ordered on: {order.orderTime}</div>
             </div>
           ))
         )}

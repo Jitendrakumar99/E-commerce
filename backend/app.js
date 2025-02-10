@@ -27,6 +27,8 @@ const PORT = process.env.PORT||3000;
 const DB_URL = process.env.DB_URL;
 const SECRET_KEY = process.env.SECRET_KEY;
 const API=process.env.API;
+const FRONTENDAPI=process.env.FRONTENDAPI;
+const LOCAL=process.env.LOCAL;
 STRIPE=process.env.STRIPE
 app.listen(PORT,function()
 {
@@ -78,11 +80,14 @@ app.post("/getcheckoutdata", async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${API}SuccessMessage`,
-      cancel_url: "http://localhost:9000/",
+      success_url: `${LOCAL}home`,
+      cancel_url: `${LOCAL}Cart`,
     });
 
-    res.json({ id: session.id });
+    res.status(200).json({ 
+      id: session.id, 
+      message: "Checkout session created successfully" });
+  
   } catch (error) {
     console.error("Stripe Error:", error);
     res.status(500).json({ error: "Failed to create checkout session" });

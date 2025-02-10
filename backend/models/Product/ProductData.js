@@ -68,11 +68,7 @@ const ProductData=new mongoose.Schema({
 		height: { type: Number, required: true },
 		depth: { type: Number, required: true },
 	  },
-	// tags: [{ type:Schema.Types.ObjectId, ref: 'Tags' }],
-	// dimensions:[{ type:Schema.Types.ObjectId, ref: 'Dimensions' }],	
 	reviews:[{type:mongoose.Schema.Types.ObjectId, ref: 'Review'}],
-	// meta:[{type:Schema.Types.ObjectId, ref: 'meta'}],
-	// images:[{type:Schema.Types.ObjectId, ref: 'images'}]
 	images:{
 		type:[String],
 		required:true

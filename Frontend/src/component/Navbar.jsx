@@ -46,12 +46,15 @@ function Navbar() {
   const navigateprofilepage = () => {
     navigate("/profile");
   };
+  const navigatetohomepage = () => {
+    navigate("/home");
+  };
   return (
-    <div className="navbar sticky z-50 top-0">
-      <div className="logo text-3xl ">
+    <div className="navbar sticky z-50 top-0 justify-between">
+      <div onClick={navigatetohomepage} className="logo text-3xl cursor-pointer ">
         Go <span className="text-2xl justify-center items-center">Cart</span>{" "}
       </div>
-      <nav className="nav">
+      {/* <nav className="nav">
         <Link
           className={(e) => {
             return e.isActive ? "red" : "";
@@ -84,7 +87,7 @@ function Navbar() {
         >
           <li>Contact</li>
         </Link>
-      </nav>
+      </nav> */}
 
       <div className="right1 ">
         {userlogin === "true" ? (

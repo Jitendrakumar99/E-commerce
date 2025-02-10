@@ -93,7 +93,7 @@ const AddItem = () => {
   };
 
   return (
-    <div className="container mt-0">
+    <div className="mt-0 left-0">
       <h2 className="mb-4">Add Product</h2>
       <form onSubmit={handleSubmit}>
         {/* Title */}

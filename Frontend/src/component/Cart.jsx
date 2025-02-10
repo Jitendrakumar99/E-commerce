@@ -10,12 +10,13 @@ import axios from 'axios'
 
 function Cart({item}) {
   const {setCartItems,cartItems,TotalPrice,setTotalPrice,TotalDisPrice,Url,setTotalDisPrice,Quantity,setQuantity}=useContext(AppContext)
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(item.quantity);
+  console.log(item);
 
   async function addCart(quantity) {
     const data = {
       cartId: item.cartId,
-      quantity: quantity, // Use the updated quantity here
+      quantity: quantity, 
     };
   
     try {
@@ -36,7 +37,14 @@ function Cart({item}) {
   
       const newValue = value - 1;
       setValue(newValue);
-      addCart(newValue); 
+  
+      // Update cartItems in context
+      const updatedCart = cartItems.map((cartItem) =>
+        cartItem._id === product._id ? { ...cartItem, quantity: newValue } : cartItem
+      );
+      setCartItems(updatedCart);
+  
+      addCart(newValue);
     }
   };
   
@@ -50,9 +58,17 @@ function Cart({item}) {
   
       const newValue = value + 1;
       setValue(newValue);
-      addCart(newValue); // Pass the updated value
+  
+      // Update cartItems in context
+      const updatedCart = cartItems.map((cartItem) =>
+        cartItem._id === product._id ? { ...cartItem, quantity: newValue } : cartItem
+      );
+      setCartItems(updatedCart);
+  
+      addCart(newValue);
     }
   };
+  
   
  
   function price(v) {

@@ -1,6 +1,6 @@
 /* Sidebar Styles */
 .sidebar {
-	top: 0;
+	top: 8;
 	left: 0;
 	min-height: calc(100vh - 60px); 
 	background-color: #343a40;
@@ -8,20 +8,25 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	transition: width 0.3s ease;
+	/* transition: width 0.3s ease; */
 	background-color: #343a40;
-  color: white;
-	transition: width 0.3s ease, background-color 0.3s ease;
+    color: white;
+	transition: width 0.3s ease-in-out, background-color 0.3s ease;
   position: relative; /* Sidebar positioned below the header */
   /* margin-top: 60px;  */
-  z-index: 999;
+  z-index: 9;
   }
   div.sidebar.collapsed {
 	width: 50px;
+	transition: width 0.3s ease-in,
   }
   
   div.sidebar.expanded {
-	width: 200px;
+	width:200px;
+	transition: width 0.3s ease-in-out,
+  }
+  .nav-item{
+	transition: width 0.3s ease-in-out, background-color 0.3s ease;
   }
   
   .admin-title {
