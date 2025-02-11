@@ -16,9 +16,9 @@ const OrderListData = new mongoose.Schema(
     shippingInformation: String,
     returnPolicy: String,
     stock: Number,
-    quantity: Number, // New field
+    quantity: Number, 
     warrantyInformation: String,
-    cartId: String, // New field
+    cartId: String,
     availabilityStatus: String,
     sku: String,
     dimensions: {

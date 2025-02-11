@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Product = require("../models/Product/ProductData");
 const Address=require('../models/User/Address');
-const OrderListData=require('../models/User/OrderList')
+const OrderListData=require('../models/User/orderSchema')
 const { userInfo } = require("os");
 require("dotenv").config();
 const createUser = async (req, res) => {
@@ -408,10 +408,10 @@ const clearUserCart = async (req, res) => {
 
     await User.findByIdAndUpdate(userId, { $set: { Cart: [] } });
 
-    console.log("✅ Cart cleared successfully");
+    console.log("Cart cleared successfully");
     return res.status(200).json({ message: "Cart cleared successfully" });
   } catch (error) {
-    console.error("❌ Error clearing cart:", error);
+    console.error("Error clearing cart:", error);
     return res.status(500).json({ error: "Failed to clear cart" });
   }
 };
@@ -419,6 +419,8 @@ const clearUserCart = async (req, res) => {
 const storeOrder = async (req, res) => {
   try {
     const orderData = req.body;
+    console.log(orderData);
+    
     const userId = req.user.userId; 
     const user = await User.findById(userId);
     if (!user) {
@@ -450,7 +452,7 @@ const storeOrder = async (req, res) => {
     });
 
     await newOrder.save();
-    user.OrderList.push(newOrder._id);
+    user.orderHistory.push(newOrder._id);
     await user.save();
     return res.status(200).json({ message: "Order stored successfully", newOrder });
   } catch (error) {

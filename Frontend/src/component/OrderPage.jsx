@@ -1,39 +1,20 @@
 import React, { useState } from 'react';
-
 const orders = [
   {
     orderId: '12345',
     items: [
-      { name: 'Item 1', image: 'https://via.placeholder.com/50', price: 299, quantity: 2 },
-      { name: 'Item 2', image: 'https://via.placeholder.com/50', price: 499, quantity: 1 },
+      { name: 'Item 1', image: 'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png', price: 9.99, quantity: 2 },
+      { name: 'Item 2', image: 'https://cdn.dummyjson.com/products/images/beauty/Red%20Lipstick/1.png', price: 12.99, quantity: 1 },
     ],
     status: 'Delivered',
     orderTime: '2024-12-20 14:30',
-    total: 1097,
+    total: 22.98,
   },
-  {
-    orderId: '12346',
-    items: [
-      { name: 'Item 3', image: 'https://via.placeholder.com/50', price: 199, quantity: 3 },
-      { name: 'Item 4', image: 'https://via.placeholder.com/50', price: 899, quantity: 1 },
-    ],
-    status: 'Pending',
-    orderTime: '2024-12-21 16:00',
-    total: 1596,
-  },
-  {
-    orderId: '12347',
-    items: [
-      { name: 'Item 5', image: 'https://via.placeholder.com/50', price: 120, quantity: 1 },
-      { name: 'Item 6', image: 'https://via.placeholder.com/50', price: 349, quantity: 2 },
-    ],
-    status: 'Shipped',
-    orderTime: '2024-12-22 10:15',
-    total: 818,
-  },
+ 
 ];
 
 function OrderPage() {
+  // const {setCartItems,cartItems,data,Url}=useContext(AppContext)
   const [filteredStatus, setFilteredStatus] = useState('All');
   const [filteredTime, setFilteredTime] = useState('All');
 
@@ -112,14 +93,14 @@ function OrderPage() {
                       <p className="text-gray-800 font-medium">{item.name}</p>
                       <p className="text-gray-600 text-sm">Qty: {item.quantity}</p>
                     </div>
-                    <p className="text-gray-600 font-medium">₹{item.price * item.quantity}</p>
+                    <p className="text-gray-600 font-medium">${item.price * item.quantity}</p>
                   </div>
                 ))}
               </div>
 
               <div className="flex justify-between mt-4 font-semibold text-lg">
                 <p>Total</p>
-                <p>₹{order.total}</p>
+                <p>${order.total}</p>
               </div>
 
               <div className="mt-3 text-sm text-gray-500">Ordered on: {order.orderTime}</div>

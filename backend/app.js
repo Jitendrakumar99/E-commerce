@@ -29,7 +29,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const API=process.env.API;
 const FRONTENDAPI=process.env.FRONTENDAPI;
 const LOCAL=process.env.LOCAL;
-STRIPE=process.env.STRIPE
+const STRIPE=process.env.STRIPE
 app.listen(PORT,function()
 {
   console.log('server_connect');

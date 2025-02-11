@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from 'react'
+import React, { useContext,useEffect, useState } from 'react'
 import { AppContext } from '../context/Context'
 import Cart from './Cart'
 import '../component/MainCart.css'
@@ -10,7 +10,7 @@ function MainCart() {
 	const {setCartItems,cartItems,TotalPrice,TotalDisPrice,Quantity,setQuantity,data,Url}=useContext(AppContext)
 	console.log("work");
 console.log(cartItems);
-
+const [currentorder,setCurrentorder]=useState([]);
     // payment integration
     const paynow = async()=>{
       console.log(cartItems);
@@ -29,12 +29,39 @@ console.log(cartItems);
           headers:headers,
           body:JSON.stringify(body)
       })
-      const token = localStorage.getItem("token");
-      axios.post(`${Url}clearUserCart`, {
+
+
+      
+      const sendItemsOneByOne = async (cartItems) => {
+        const url = `${Url}storeOrder`; 
+        const token = localStorage.getItem("token");
+        for (const item of cartItems) {
+          try {
+            console.log(item);
+            
+            const response = await axios.post(url, 
+              { product: item }, 
+              {
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` 
+                }
+            }
+            );
+            console.log(`Item sent: ${item.title}`, response.data);
+          } catch (error) {
+            console.error(`Error sending item: ${item.title}`, error.response?.data || error);
+          }
+        }
+       
+        axios.post(`${Url}clearUserCart`, {}, { 
           headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => console.log("Cart cleared:", res))
-      .catch((error) => console.log("Cart clear error:", error));
+      .then((res) => {console.log("Cart cleared:", res.data); setCurrentorder(cartItems)})
+      .catch((error) => console.log("Cart clear error:", error.response?.data || error));
+      
+      };
+     await sendItemsOneByOne(cartItems);
       if (response.status === 200) {
         const session = await response.json();
 
@@ -43,6 +70,7 @@ console.log(cartItems);
         const result = await stripe.redirectToCheckout({
             sessionId: session.id
         });
+
 
 
         
