@@ -42,11 +42,18 @@ app.get('/',function(req,res)
   
 })
 
-mongoose.connect(DB_URL)
-  .then(() => console.log('Database connected successfully'))
-  .catch((error) => console.error('Database connection error:', error));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DB_URL); // No need for useNewUrlParser or useUnifiedTopology
+    console.log("✅ MongoDB connected successfully!");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    process.exit(1); // Stop app if DB fails
+  }
+};
 
-
+// Call connection function
+connectDB();
 
 const stripe = require("stripe")(STRIPE);
 app.post("/getcheckoutdata", async (req, res) => {

@@ -16,8 +16,8 @@ export const AppContext=createContext({
 export default function AppContextProvider({children}) {
 	const [counter ,setcounter]=useState(10);
    
-  // const [Url,setUrl]=useState('https://e-commerce-backend-czqd.onrender.com/');
-  const [Url,setUrl]=useState('http://localhost:9000/');
+  const [Url,setUrl]=useState('https://e-commerce-backend-czqd.onrender.com/');
+  // const [Url,setUrl]=useState('http://localhost:9000/');
   const [data,setData]=useState(null);
   const [lod,setloader]=useState(true)
   const [Filter,setfilter]=useState(null);

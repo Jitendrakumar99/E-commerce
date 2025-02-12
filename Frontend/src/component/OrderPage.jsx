@@ -5,10 +5,11 @@ const orders = [
     items: [
       { name: 'Item 1', image: 'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png', price: 9.99, quantity: 2 },
       { name: 'Item 2', image: 'https://cdn.dummyjson.com/products/images/beauty/Red%20Lipstick/1.png', price: 12.99, quantity: 1 },
+      { name: 'Item 3', image: 'https://cdn.dummyjson.com/products/images/fragrances/Chanel%20Coco%20Noir%20Eau%20De/1.png', price:129.99, quantity: 1 },
     ],
-    status: 'Delivered',
+    status: 'Process',
     orderTime: '2024-12-20 14:30',
-    total: 22.98,
+    total: 162.96,
   },
  
 ];

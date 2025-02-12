@@ -31,37 +31,43 @@ const [currentorder,setCurrentorder]=useState([]);
       })
 
 
+      const token = localStorage.getItem("token");
       
-      const sendItemsOneByOne = async (cartItems) => {
-        const url = `${Url}storeOrder`; 
-        const token = localStorage.getItem("token");
-        for (const item of cartItems) {
-          try {
-            console.log(item);
+      // const sendItemsOneByOne = async (cartItems) => {
+      //   const url = `${Url}storeOrder`; 
+      //   for (const item of cartItems) {
+      //     try {
+      //       console.log(item);
             
-            const response = await axios.post(url, 
-              { product: item }, 
-              {
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` 
-                }
-            }
-            );
-            console.log(`Item sent: ${item.title}`, response.data);
-          } catch (error) {
-            console.error(`Error sending item: ${item.title}`, error.response?.data || error);
-          }
-        }
+      //       const response = await axios.post(url, 
+      //         { product: item }, 
+      //         {
+      //           headers: { 
+      //               "Content-Type": "application/json",
+      //               "Authorization": `Bearer ${token}` 
+      //           }
+      //       }
+      //       );
+      //       console.log(`Item sent: ${item.title}`, response.data);
+      //     } catch (error) {
+      //       console.error(`Error sending item: ${item.title}`, error.response?.data || error);
+      //     }
+      //   }
        
+      //   axios.post(`${Url}clearUserCart`, {}, { 
+      //     headers: { Authorization: `Bearer ${token}` },
+      // })
+      // .then((res) => {console.log("Cart cleared:", res.data); setCurrentorder(cartItems)})
+      // .catch((error) => console.log("Cart clear error:", error.response?.data || error));
+      
+      // };
+      // sendItemsOneByOne(cartItems);
         axios.post(`${Url}clearUserCart`, {}, { 
           headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {console.log("Cart cleared:", res.data); setCurrentorder(cartItems)})
       .catch((error) => console.log("Cart clear error:", error.response?.data || error));
       
-      };
-     await sendItemsOneByOne(cartItems);
       if (response.status === 200) {
         const session = await response.json();
 
