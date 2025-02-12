@@ -37,7 +37,7 @@ A comprehensive full-stack e-commerce web application built with modern technolo
 - Backend: Render or Heroku
 ## Screenshots
 
-![App Screenshot](https://i.ibb.co/fQ293tm/image.png)
+![App Screenshot](https://res.cloudinary.com/du15dlpjn/image/upload/v1739374440/Screenshot_2025-02-12_210310_iypwn8.png)
 
 
 
