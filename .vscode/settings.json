@@ -1,0 +1,10 @@
+{
+	"mos.port": "",
+	"files.exclude": {
+		"**/.git": false
+	},
+	"cSpell.words": [
+		"imagegallary",
+		"Imagehandle"
+	]
+}

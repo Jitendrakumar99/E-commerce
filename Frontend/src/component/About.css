@@ -1,0 +1,76 @@
+/* General Styles */
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	color: #333;
+	background-color: #f4f4f4;
+	margin: 0;
+	padding: 0;
+  }
+  
+  .div {
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 20px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h2 {
+	color: #333;
+  }
+  
+  h1 {
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+  }
+  
+  h2 {
+	font-size: 1.8rem;
+	margin-bottom: 15px;
+  }
+  
+  /* Reviews Section */
+  .reviews {
+	background-color: #e9ecef;
+	padding: 15px;
+	border-radius: 5px;
+	margin-bottom: 20px;
+  }
+  
+  .reviews h2 {
+	margin: 0;
+  }
+  
+  .reviews p {
+	margin: 5px 0;
+  }
+  
+  /* Footer Styles */
+  footer {
+	border-top: 1px solid #ddd;
+	padding-top: 10px;
+	margin-top: 20px;
+  }
+  
+  footer p {
+	margin: 5px 0;
+  }
+  
+  footer p:first-of-type {
+	font-weight: bold;
+  }
+  
+  footer p:last-of-type {
+	font-style: italic;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+	.div {
+	  padding: 15px;
+	  margin: 10px;
+	}
+  }
+  

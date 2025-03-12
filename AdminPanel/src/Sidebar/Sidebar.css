@@ -1,0 +1,105 @@
+/* Sidebar Styles */
+.sidebar {
+	top: 8;
+	left: 0;
+	min-height: calc(100vh - 60px); 
+	background-color: #343a40;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	/* transition: width 0.3s ease; */
+	background-color: #343a40;
+    color: white;
+	transition: width 0.3s ease-in-out, background-color 0.3s ease;
+  position: relative; /* Sidebar positioned below the header */
+  /* margin-top: 60px;  */
+  z-index: 9;
+  }
+  div.sidebar.collapsed {
+	width: 50px;
+	transition: width 0.3s ease-in,
+  }
+  
+  div.sidebar.expanded {
+	width:200px;
+	transition: width 0.3s ease-in-out,
+  }
+  .nav-item{
+	transition: width 0.3s ease-in-out, background-color 0.3s ease;
+  }
+  
+  .admin-title {
+	margin: 15px 0;
+	font-size: 20px;
+	font-weight: bold;
+	transition: opacity 0.3s ease;
+  }
+  
+  
+  .nav {
+	padding: 0;
+  }
+  
+  .nav-item {
+	list-style: none;
+	margin: 10px 0;
+  }
+  
+  .nav-link {
+	display: flex;
+	align-items: center;
+	color: white;
+	text-decoration: none;
+	padding: 10px 15px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+	background-color: #495057;
+  }
+  
+  .nav-link i {
+	font-size: 20px;
+	margin-right: 10px;
+	transition: margin-right 0.3s ease;
+  }
+  
+ 
+  
+  .nav-link span {
+	white-space: nowrap;
+	overflow: hidden;
+	transition: opacity 0.3s ease;
+  }
+ 
+  
+  /* Toggle Button */
+  .toggle-btn {
+	background-color: #343a40;
+	border: none;
+	color: white;
+	font-size: 20px;
+	cursor: pointer;
+	padding: 10px;
+	align-self: flex-end;
+	margin: 10px;
+	transition: transform 0.3s ease;
+  }
+  
+  .toggle-btn:hover {
+	transform: scale(1.1);
+  }
+  .Arrowbox{
+	position: absolute;
+	/* margin-right: 0px; */
+	float:right;
+	width: 25px;
+	height: 25px;
+	top: 0px;
+	right: -6px;
+	font-size: 35px;
+	color: #A7396F;
+	cursor: pointer;
+	/* color: black; */
+  }

@@ -1,0 +1,60 @@
+/* Header Styling */
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+	background-color: #f8f9fa;
+	border-bottom: 1px solid #ddd;
+	font-family: Arial, sans-serif;
+  }
+  .left {
+	display: flex;
+	align-items: center;
+	width: 180px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+  }
+  
+  .hamburger {
+	font-size: 24px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	margin-right: 10px;
+  }
+  
+  .title {
+	font-size: 18px;
+	font-weight: bold;
+  }
+  
+  .right {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end; /* Align the right section to the right */
+  }
+  
+  .btn {
+	padding: 5px 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+  }
+  
+  .login-btn {
+	background-color: #007bff;
+	color: white;
+  }
+  
+  .profile-btn {
+	background-color: #28a745;
+	color: white;
+  }
+  
+  /* Button Hover Effects */
+  .btn:hover {
+	opacity: 0.9;
+  }
+  

@@ -1,0 +1,105 @@
+General Styles
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f8f9fa;
+	margin: 0;
+	padding: 0;
+  }
+  
+  .card {
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	margin-bottom: 1.5rem;
+  }
+  
+  .card-header {
+	background-color: #fff;
+	border-bottom: 1px solid #eaeaea;
+	padding: 1rem;
+  }
+  
+  .card-title {
+	font-weight: bold;
+	margin: 0;
+  }
+  
+  .card-body {
+	padding: 1rem;
+  }
+  
+  /* Order Cards */
+  .bg-c-blue {
+	background-color: #4e73df !important;
+	color: #fff;
+  }
+  
+  .bg-c-green {
+	background-color: #1cc88a !important;
+	color: #fff;
+  }
+  
+  .bg-c-yellow {
+	background-color: #f6c23e !important;
+	color: #fff;
+  }
+  
+  .bg-c-red {
+	background-color: #e74a3b !important;
+	color: #fff;
+  }
+  
+  /* ListGroup */
+  .feed-blog .feed-user-img img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+  }
+  
+  .active-feed {
+	background-color: #f0f4f9;
+	padding: 1rem;
+	border-left: 4px solid #4e73df;
+  }
+  
+  .diactive-feed {
+	padding: 1rem;
+	background-color: #fff;
+  }
+  
+  /* Table Styles */
+  .table-card {
+	overflow-x: auto;
+  }
+  
+  .table th, .table td {
+	padding: 0.75rem;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 14px;
+  }
+  
+  .table th {
+	font-weight: bold;
+	background-color: #f8f9fa;
+  }
+  
+  /* Charts */
+  .chart-container {
+	margin: 1rem 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+	.card {
+	  margin-bottom: 1rem;
+	}
+  
+	.card-header h5 {
+	  font-size: 1.25rem;
+	}
+  
+	.table th, .table td {
+	  font-size: 12px;
+	}
+  }
+  
