@@ -80,7 +80,7 @@ function Navbar() {
           >
             {UserData.photoURL ? (
               <img 
-                src={UserData.photoURL||""} 
+                src={UserData.photoURL} 
                 alt={UserData.displayName||UserData.FirstName} 
                 className="w-8 h-8 rounded-full"
               />

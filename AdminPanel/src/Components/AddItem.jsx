@@ -57,8 +57,7 @@ console.log(productData);
     data.append("file", file);
     data.append("upload_preset", "ml_default");
     data.append("cloud_name", "du15dlpjn");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/du15dlpjn/image/upload",
+    const res = await fetch(import.meta.env.VITE_CLOUDINARY,
       {
         method: "POST",
         body: data,

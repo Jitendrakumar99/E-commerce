@@ -6,15 +6,15 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
+app.use(session({ secret: import.meta.env.VITE_SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      clientSecret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {

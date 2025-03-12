@@ -33,10 +33,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const EditItem = () => {
   const [data,setData]=useState([ ]);
   const [validationErrors, setValidationErrors] = useState({});
+  const backendUrl = import.meta.env.VITE_URLAPI;
   useEffect(() => {
     const fetchData= async()=>{
         try{
-           const res= await axios.get('https://e-commerce-backend-czqd.onrender.com/getalldata')
+           const res= await axios.get(`${backendUrl}getalldata`);
            console.log(res.data);
            setData(res.data)
         }
@@ -458,7 +459,7 @@ const EditItem = () => {
       
     };
     try {
-      await axios.put(`https://e-commerce-backend-czqd.onrender.com/updataproduct`, updatedData); 
+      await axios.put(`${backendUrl}updataproduct`, updatedData); 
       setData(data.map((row) => (row._id === values._id ? values : row)));
       table.setEditingRow(null);
     } catch (error) {
@@ -472,7 +473,7 @@ const EditItem = () => {
       try {
         console.log(row.original._id);
         const _id=row.original._id
-        await axios.delete('https://e-commerce-backend-czqd.onrender.com/deleteProduct',{data: { _id },});
+        await axios.delete(`${backendUrl}deleteProduct`,{data: { _id },});
         setData(data.filter((user) => user._id !== row.original._id));
       } catch (error) {
         console.error('Error deleting user:', error);

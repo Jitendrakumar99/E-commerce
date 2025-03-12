@@ -3,9 +3,9 @@ import { Copy, Upload, X } from "lucide-react";
 import axios from 'axios'
 // import dotenv from 'dotenv';
 // dotenv.config();
-const CLOUDINARY=import.meta.env.CLOUDINARY;
+const CLOUDINARY=import.meta.env.VITE_CLOUDINARY;
 function ImageGallery() {
-  
+  const backendUrl = import.meta.env.VITE_URLAPI;
   const [images, setImages] = useState([]);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,7 +15,7 @@ function ImageGallery() {
   },[])
   const getimage=()=>{
 
-    axios.get('https://e-commerce-backend-czqd.onrender.com/getimage')
+    axios.get(`${backendUrl}getimage`)
     .then((res) => {
       console.log(res.data);
       setImages(res.data);
@@ -32,7 +32,7 @@ function ImageGallery() {
     data.append("file", file);
     data.append("upload_preset", "ml_default");
     data.append("cloud_name", "du15dlpjn");
-    const res = await fetch("https://api.cloudinary.com/v1_1/du15dlpjn/image/upload",
+    const res = await fetch(VITE_CLOUDINARY,
       {
         method: "POST",
         body: data,
@@ -44,7 +44,7 @@ function ImageGallery() {
     
     setImages([...images, { url: image, name: file.name || 'Untitled' }]);
 
-    axios.post('http://localhost:9000/imageGallary', { image: image })
+    axios.post(`${backendUrl}imageGallary`, { image: image })
       .then((res) => {
         console.log(res);
       })

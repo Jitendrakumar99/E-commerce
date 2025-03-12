@@ -17,6 +17,7 @@
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
+    "dotenv-webpack": "^8.1.0",
     "firebase": "^11.3.1",
     "lottie-react": "^2.4.0",
     "multer": "^1.4.5-lts.1",

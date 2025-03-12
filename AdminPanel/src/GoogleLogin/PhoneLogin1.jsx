@@ -1,7 +1,7 @@
 import React from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
-const clientId = "495349777657-7lqqcjokm94hg0kcctnpmojrqhdfomnm.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function PhoneLogin() {
   return (

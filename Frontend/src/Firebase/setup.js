@@ -1,18 +1,23 @@
-// Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 import {getAuth} from 'firebase/auth'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
+
+const api= await import.meta.env.VITE_APIKEY;
+const authDomain= await import.meta.env.VITE_AUTHDOMAIN;
+const projectId=await import.meta.env.VITE_PROJECTID;
+const storageBucket=await import.meta.env.VITE_STORAGEBUCKET;
+const messagingSenderId=await import.meta.env.VITE_MESSAGINGSENDERID;
+const appId=await import.meta.env.VITE_APPID;
+
+console.log(api);
 const firebaseConfig = {
-  apiKey: "AIzaSyCXEhlCCm4CxK0T2ZSbhJSlD5y6-PKUVO8",
-  authDomain: "ecommerce-717ae.firebaseapp.com",
-  projectId: "ecommerce-717ae",
-  storageBucket: "ecommerce-717ae.firebasestorage.app",
-  messagingSenderId: "136462232940",
-  appId: "1:136462232940:web:110161ed79518667785749"
+  apiKey: api,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId
 };
-
-
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
