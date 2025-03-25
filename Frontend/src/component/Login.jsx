@@ -49,27 +49,38 @@ function Login() {
   };
 
   const submithandler = async () => {
-    axios
-      .post(`${Url}Auth`, signData)
-      .then((res) => {
-        console.log(res);
-        setshowmessage("");
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.success("Email Already registered");
-      });
+    try {
+      const res = await axios.post(`${Url}Auth`, signData);
+      console.log("Signup Response:", res);
+      setshowmessage("Signup successful!"); // Ensure this works
+      toast.success("Signup successful!");
+    } catch (err) {
+      console.error("Signup Error:", err);
+      
+      if (err.response) {
+        console.log("Error Response Data:", err.response.data);
+        console.log("Error Status:", err.response.status);
+        
+        toast.error(err.response.data.message || "Signup failed.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    }
   };
+  
+  
 
   const loginSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      await loginhandler(loginData);
+     const check= await loginhandler(loginData);
       // Get the redirect path from location state or default to home
+      toast.success("Login successful!");
       const from = location.state?.from?.pathname || "/home";
       navigate(from, { replace: true });
-    } catch (error) {
+    } catch (error) { 
       console.error("Login failed:", error);
+      toast.error("Login failed");
     }
   };
 

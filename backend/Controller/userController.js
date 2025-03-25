@@ -10,112 +10,94 @@ const OrderListData=require('../models/User/orderSchema')
 const { userInfo } = require("os");
 require("dotenv").config();
 const createUser = async (req, res) => {
-  const { Email, Password, confirmpassword, Phone, FirstName, LastName, uid, displayName, photoURL, lastLoginAt } = req.body;
-  console.log(req.body);
-  if(!displayName){
-    displayName=FirstName+" "+LastName;
-  }
-  const JWT_SECRET = await process.env.JWT_SECRET;
+  try {
+    const { Email, Password, confirmpassword, Phone, FirstName, LastName, uid, photoURL, lastLoginAt } = req.body;
+    let { displayName } = req.body;
 
-  // Check if this is a Google signup (has uid)
-  if (uid) {
-    try {
-      const existingUser = await User.findOne({ 
-        $or: [
-          { Email },
-          { uid }
-        ]
+    console.log("Received Signup Request:", req.body);
+
+    if (!displayName) {
+      displayName = `${FirstName} ${LastName}`; // ✅ Concatenates names correctly
+    }
+
+    const JWT_SECRET = process.env.JWT_SECRET; // ✅ Ensure this is properly set
+
+    /** ✅ Google Signup (Has `uid`) **/
+    if (uid) {
+      const existingUser = await User.findOne({
+        $or: [{ Email: Email.toLowerCase() }, { uid }],
       });
 
       if (existingUser) {
-        // Update last login time for existing user
         existingUser.lastLoginAt = lastLoginAt;
         await existingUser.save();
 
-        // Generate token for existing user
         const token = jwt.sign(
-          { userId: existingUser._id, email: existingUser.Email, _id: existingUser._id },
+          { userId: existingUser._id, email: existingUser.Email },
           JWT_SECRET,
           { expiresIn: "1h" }
         );
 
-        return res.status(200).json({ 
-          message: "User exists", 
-          user: existingUser,
-          token 
-        });
+        return res.status(200).json({ message: "User exists", user: existingUser, token });
       }
 
-      // Create new Google user
-      const user = new User({
-        Email,
+      const googleUser = new User({
+        Email: Email.toLowerCase(),
         FirstName,
         LastName,
         displayName,
         photoURL,
-        uid,
+        uid, // ✅ Only saves `uid` if provided
         lastLoginAt,
-        isVerified: true, // Google users are pre-verified
-        Password: 'google-auth-' + uid // Set a default password for Google users
+        isVerified: true,
+        Password: `google-auth-${uid}`, // ✅ Google accounts don't use real passwords
       });
 
-      await user.save();
+      await googleUser.save();
 
-      // Generate token for new user
       const token = jwt.sign(
-        { userId: user._id, email: user.Email, _id: user._id },
+        { userId: googleUser._id, email: googleUser.Email },
         JWT_SECRET,
         { expiresIn: "1h" }
       );
 
-      return res.status(201).json({ 
-        message: "Google user created successfully", 
-        user,
-        token 
-      });
-    } catch (error) {
-      return res.status(500).json({ 
-        message: "Error creating Google user", 
-        error: error.message 
-      });
+      return res.status(201).json({ message: "Google user created successfully", user: googleUser, token });
     }
-  }
 
-  // Regular form signup validation
-  if (!FirstName || !Email || !Password || !confirmpassword) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
+    /** ✅ Regular Signup (No `uid`) **/
+    if (!FirstName || !Email || !Password || !confirmpassword) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
 
-  if (Password !== confirmpassword) {
-    return res.status(400).json({ message: "Passwords do not match." });
-  }
+    if (Password !== confirmpassword) {
+      return res.status(400).json({ message: "Passwords do not match." });
+    }
 
-  try {
-    const existingUser = await User.findOne({ Email });
+    const existingUser = await User.findOne({ Email: Email.toLowerCase() });
     if (existingUser) {
-      return res.status(400).json({
-        message: "Email already exists. Please use a different email.",
-      });
+      return res.status(400).json({ message: "Email already exists. Please use a different email." });
     }
 
     const hashedPassword = await bcrypt.hash(Password, 10);
-    const user = new User({
-      Email,
+    const newUser = new User({
+      Email: Email.toLowerCase(),
       Password: hashedPassword,
       FirstName,
       LastName,
-      Phone
+      Phone,
+      displayName,
     });
 
-    await user.save();
-    res.status(201).json({ message: "User created successfully", user });
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully", user: newUser });
   } catch (error) {
-    res.status(500).json({ 
-      message: "Error creating user", 
-      error: error.message 
-    });
+    console.error("Signup error:", error);
+    res.status(500).json({ message: "Error creating user", error: error.message });
   }
 };
+
+
+
 const loginUser = async (req, res) => {
   const { Email, Password } = req.body;
   const JWT_SECRET = await process.env.JWT_SECRET;

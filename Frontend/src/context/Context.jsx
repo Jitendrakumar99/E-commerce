@@ -20,8 +20,8 @@ export default function AppContextProvider({children}) {
 	const [counter ,setcounter]=useState(10);
    const api=import.meta.env.VITE_URLAPI;
    console.log(api);
-  const [Url,setUrl]=useState(api);
-  // const [Url,setUrl]=useState('http://localhost:9000/');
+  // const [Url,setUrl]=useState(api);
+  const [Url,setUrl]=useState('http://localhost:9000/');
   const [data,setData]=useState(null);
   const [lod,setloader]=useState(true)
   const [Filter,setfilter]=useState(null);
@@ -220,20 +220,21 @@ useEffect(() => {
 }, [cartItems]);
  
 const [loginres,setloginres]=useState();
-const Loginhandler=async(loginData)=>{
-  axios
-  .post(`${Url}login`, loginData)
-  .then((res) => {
+const Loginhandler = async (loginData) => {
+  try {
+    const res = await axios.post(`${Url}login`, loginData);
     console.log(res);
-    setloginres(res);
+    setloginres(res); // Ensure `setloginres` is properly defined in your component
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("isLoggedIn", "true");
-    
-  })
-  .catch((err) => {
-    console.log("error");
-  });
-}
+
+    return res; // Return the response so it can be awaited
+  } catch (err) {
+    console.error("Login error:", err);
+    throw err; // Ensure the error is propagated to be caught in loginSubmitHandler
+  }
+};
+
 
 
 

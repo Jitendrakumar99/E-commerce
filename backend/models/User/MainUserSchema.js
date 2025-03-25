@@ -34,11 +34,7 @@ const MainUserSchema=new mongoose.Schema({
 		type: String,
 		default: null
 	},
-	uid: {
-		type: String,
-		default: null,
-		unique: true
-	},
+	uid: { type: String, unique: true, sparse: true },
 	lastLoginAt: {
 		type: Date,
 		default: null
