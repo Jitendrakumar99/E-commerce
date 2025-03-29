@@ -17,12 +17,12 @@ const createUser = async (req, res) => {
     console.log("Received Signup Request:", req.body);
 
     if (!displayName) {
-      displayName = `${FirstName} ${LastName}`; // ✅ Concatenates names correctly
+      displayName = `${FirstName} ${LastName}`;
     }
 
-    const JWT_SECRET = process.env.JWT_SECRET; // ✅ Ensure this is properly set
+    const JWT_SECRET = process.env.JWT_SECRET;
 
-    /** ✅ Google Signup (Has `uid`) **/
+    /** Google Signup (Has `uid`) **/
     if (uid) {
       const existingUser = await User.findOne({
         $or: [{ Email: Email.toLowerCase() }, { uid }],
@@ -38,7 +38,11 @@ const createUser = async (req, res) => {
           { expiresIn: "1h" }
         );
 
-        return res.status(200).json({ message: "User exists", user: existingUser, token });
+        return res.status(200).json({ 
+          message: "User exists", 
+          user: existingUser, 
+          token 
+        });
       }
 
       const googleUser = new User({
@@ -47,10 +51,10 @@ const createUser = async (req, res) => {
         LastName,
         displayName,
         photoURL,
-        uid, // ✅ Only saves `uid` if provided
+        uid,
         lastLoginAt,
         isVerified: true,
-        Password: `google-auth-${uid}`, // ✅ Google accounts don't use real passwords
+        Password: `google-auth-${uid}`,
       });
 
       await googleUser.save();
@@ -61,10 +65,14 @@ const createUser = async (req, res) => {
         { expiresIn: "1h" }
       );
 
-      return res.status(201).json({ message: "Google user created successfully", user: googleUser, token });
+      return res.status(201).json({ 
+        message: "Google user created successfully", 
+        user: googleUser, 
+        token 
+      });
     }
 
-    /** ✅ Regular Signup (No `uid`) **/
+    /** Regular Signup (No `uid`) **/
     if (!FirstName || !Email || !Password || !confirmpassword) {
       return res.status(400).json({ message: "All fields are required." });
     }
@@ -84,12 +92,25 @@ const createUser = async (req, res) => {
       Password: hashedPassword,
       FirstName,
       LastName,
-      Phone,
+      Phone: Phone || null,
       displayName,
+      uid: null  // Set to null for regular signup
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User created successfully", user: newUser });
+
+    // Generate token for regular signup
+    const token = jwt.sign(
+      { userId: newUser._id, email: newUser.Email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(201).json({ 
+      message: "User created successfully", 
+      user: newUser,
+      token 
+    });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Error creating user", error: error.message });

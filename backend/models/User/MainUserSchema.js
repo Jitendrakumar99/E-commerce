@@ -23,21 +23,24 @@ const MainUserSchema=new mongoose.Schema({
 	},
 	Phone:{
 		type:Number,
-		default:null
+		
 	},
 	// Google User Data
 	displayName: {
 		type: String,
-		default: null
+		
 	},
 	photoURL: {
 		type: String,
-		default: null
+		
 	},
-	uid: { type: String, unique: true, sparse: true },
+	uid: { 
+		type: String,
+		sparse: true,
+		
+	},
 	lastLoginAt: {
 		type: Date,
-		default: null
 	},
 	Address:[{ type:mongoose.Schema.Types.ObjectId, ref: 'Address' }],
 	PaymentMethod :[{ type:mongoose.Schema.Types.ObjectId, ref: 'PaymentMethod' }],

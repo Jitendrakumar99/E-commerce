@@ -52,16 +52,28 @@ function Login() {
     try {
       const res = await axios.post(`${Url}Auth`, signData);
       console.log("Signup Response:", res);
-      setshowmessage("Signup successful!"); // Ensure this works
-      toast.success("Signup successful!");
+      if (res.data.token) {
+        toast.success("Signup successful! Please login to continue.");
+        setsignData({
+          FirstName: "",
+          LastName: "",
+          Email: "",
+          Phone: "",
+          Password: "",
+          confirmpassword: "",
+        });
+        setlogin_signup(false);
+        setLoginData(prev => ({
+          ...prev,
+          Email: signData.Email
+        }));
+      } else {
+        toast.error("Signup failed - No token received");
+      }
     } catch (err) {
       console.error("Signup Error:", err);
-      
       if (err.response) {
-        console.log("Error Response Data:", err.response.data);
-        console.log("Error Status:", err.response.status);
-        
-        toast.error(err.response.data.message || "Signup failed.");
+        toast.error(err.response.data.message || "Signup failed");
       } else {
         toast.error("Something went wrong. Please try again.");
       }
@@ -73,14 +85,24 @@ function Login() {
   const loginSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-     const check= await loginhandler(loginData);
-      // Get the redirect path from location state or default to home
-      toast.success("Login successful!");
-      const from = location.state?.from?.pathname || "/home";
-      navigate(from, { replace: true });
+      const check = await loginhandler(loginData);
+      if (check.data.token) {
+        localStorage.setItem("token", check.data.token);
+        localStorage.setItem("isLoggedIn", "true");
+        toast.success("Login successful!");
+        setshowuser(false);
+        const from = location.state?.from?.pathname || "/home";
+        navigate(from, { replace: true });
+      } else {
+        toast.error("Login failed - No token received");
+      }
     } catch (error) { 
       console.error("Login failed:", error);
-      toast.error("Login failed");
+      if (error.response) {
+        toast.error(error.response.data.message || "Login failed");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
