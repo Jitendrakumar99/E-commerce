@@ -38,7 +38,7 @@ const PhoneLogin = () => {
         localStorage.setItem('isLoggedIn', 'true');
         
         toast.success("Login successful!");
-        navigate('/home');
+        navigate('/');
         window.location.reload();
       } catch (error) {
         console.error('Backend error:', error);
@@ -49,7 +49,7 @@ const PhoneLogin = () => {
           localStorage.setItem('isLoggedIn', 'true');
           
           toast.success("Login successful!");
-          navigate('/home');
+          navigate('/');
         } else {
           toast.error("Failed to sync with backend");
         }

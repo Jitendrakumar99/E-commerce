@@ -17,15 +17,14 @@ import SuccessMessage from './component/SuccessMessage.jsx';
 import Notification from './component/Notification.jsx';
 function App() {
   const {WishlistItem,isOpen,setIsOpen}=useContext(AppContext);
-  
   return (
     <BrowserRouter>
     <Layout/>
     <Notification />
     <Routes>
-      <Route index element={<Login/>}/>
-      <Route path='/' element={<Layout/>}></Route>
-      <Route path='/home' element={<HomePage/>}></Route>
+      <Route path='/' element={<HomePage/>}></Route>
+      <Route path='/login'  element={<Login/>}/>
+      {/* <Route index path='/' element={<Layout/>}></Route> */}
       <Route path='/Cart' element={<MainCart/>}></Route>
       <Route path='/wishlist' element={<Wishlist key={WishlistItem}/>}></Route>
       <Route path='/About' element={<About/>}></Route>

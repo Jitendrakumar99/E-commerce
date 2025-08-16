@@ -50,7 +50,7 @@ function ProductDetailPage() {
 				} else if (productinfo?._id) {
 					await fetchReviews(productinfo._id);
 				} else {
-					navigate('/home');
+					navigate('/');
 				}
 			} catch (error) {
 				console.error('Error loading product data:', error);

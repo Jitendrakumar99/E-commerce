@@ -64,7 +64,7 @@ const navigate=useNavigate();
     if (!id) return;
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("User not logged in");
+      toast.error("Please log in to continue");
       return;
     }
     if (action === "add") {
@@ -92,7 +92,7 @@ const navigate=useNavigate();
   const heartcount = (check,id) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("User not logged in");
+      toast.error("Please log in to continue");
       return;
     }
     if(check=="add"){

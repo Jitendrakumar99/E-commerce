@@ -20,9 +20,10 @@ function Navbar() {
   const handleAvatarClick = () => {
     if (userlogin !== "true") {
       setshowuser(true);
-      navigate("/");
+      navigate("/login");
     }
   };
+
 
   const usernamehandler = () => {
     setuseroption(true);
@@ -62,9 +63,9 @@ function Navbar() {
   };
 
   const navigatetohomepage = () => {
-    navigate("/home");
+    navigate("/");
   };
-
+ 
   return (
     <div className="navbar sticky z-50 top-0 justify-between">
       <div onClick={navigatetohomepage} className="logo text-3xl cursor-pointer">
@@ -84,8 +85,7 @@ function Navbar() {
                 alt={UserData.displayName||UserData.FirstName} 
                 className="w-8 h-8 rounded-full"
               />
-            ) : (
-              <RxAvatar className="" fontSize={"30px"} />
+            ) : (  <RxAvatar className="" fontSize={"30px"} />
             )}
             <span className="text-sm truncate">{UserData.FirstName||UserData.displayName}</span>
             <MdKeyboardArrowDown />

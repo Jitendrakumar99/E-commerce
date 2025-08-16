@@ -5,7 +5,7 @@ function SuccessMessage() {
   const navigate=useNavigate();
   const closePopup = () => {
     setShow(false);
-      navigate('/home')
+      navigate('/')
   };
 
   return (

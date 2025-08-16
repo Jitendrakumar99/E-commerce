@@ -91,7 +91,7 @@ function Login() {
         localStorage.setItem("isLoggedIn", "true");
         toast.success("Login successful!");
         setshowuser(false);
-        const from = location.state?.from?.pathname || "/home";
+        const from = location.state?.from?.pathname || "/";
         navigate(from, { replace: true });
       } else {
         toast.error("Login failed - No token received");
